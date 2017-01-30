@@ -49,7 +49,8 @@ class FormValidationExceptionTest extends \PHPUnit_Framework_TestCase
         $form = m::mock(FormInterface::class);
         $form->shouldReceive('isRoot')->andReturn(true);
         $form->shouldReceive('getErrors')->andReturn(new FormErrorIterator($form, [
-            new FormError('Some General Error', '', [])
+            new FormError('General Error'),
+            new FormError('CSRF Error')
         ]));
 
         $childForm = m::mock(FormInterface::class);
@@ -58,7 +59,10 @@ class FormValidationExceptionTest extends \PHPUnit_Framework_TestCase
         $childForm->shouldReceive('getName')->andReturn('name');
         $childForm->shouldReceive('all')->andReturn([]);
         $childForm->shouldReceive('getErrors')->andReturn(new FormErrorIterator($form, [
-            new FormError('Some Field Error', '', [])
+            new FormError('Constraint Failed Error', '', [], null, new ConstraintViolation(
+                'Foo', '', [], false, 'name', null, null, null, new NotBlank()
+            )),
+            new FormError('Other Error')
         ]));
 
         $form->shouldReceive('all')->andReturn([
@@ -71,10 +75,18 @@ class FormValidationExceptionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('#', $arrayException['fields'][0]['field']);
         $this->assertEquals('error.form.validation.general', $arrayException['fields'][0]['code']);
-        $this->assertEquals('Some General Error', $arrayException['fields'][0]['message']);
+        $this->assertEquals('General Error', $arrayException['fields'][0]['message']);
 
-        $this->assertEquals('name', $arrayException['fields'][1]['field']);
-        $this->assertEquals('error.form.validation.general', $arrayException['fields'][1]['code']);
-        $this->assertEquals('Some Field Error', $arrayException['fields'][1]['message']);
+        $this->assertEquals('#', $arrayException['fields'][1]['field']);
+        $this->assertEquals('error.form.validation.csrf', $arrayException['fields'][1]['code']);
+        $this->assertEquals('CSRF Error', $arrayException['fields'][1]['message']);
+
+        $this->assertEquals('name', $arrayException['fields'][2]['field']);
+        $this->assertEquals('error.form.validation.not_blank', $arrayException['fields'][2]['code']);
+        $this->assertEquals('Constraint Failed Error', $arrayException['fields'][2]['message']);
+
+        $this->assertEquals('name', $arrayException['fields'][3]['field']);
+        $this->assertEquals('error.form.validation.general', $arrayException['fields'][3]['code']);
+        $this->assertEquals('Other Error', $arrayException['fields'][3]['message']);
     }
 }

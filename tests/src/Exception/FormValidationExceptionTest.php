@@ -4,13 +4,12 @@ namespace tests\MediaMonks\RestApi\Exception;
 
 use MediaMonks\RestApi\Exception\FormValidationException;
 use Mockery as m;
-use Symfony\Component\Form\FormInterface;
 
 class FormValidationExceptionTest extends \PHPUnit_Framework_TestCase
 {
     public function testEmptyForm()
     {
-        $form = m::mock(FormInterface::class);
+        $form = m::mock('Symfony\Component\Form\FormInterface');
         $form->shouldReceive('getErrors')->andReturn([]);
         $form->shouldReceive('all')->andReturn([]);
 

@@ -7,12 +7,8 @@ use Mockery as m;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormErrorIterator;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\Forms;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\ConstraintViolation;
-use Symfony\Component\Validator\ConstraintViolationList;
-use tests\MediaMonks\RestApi\Form\Type\TestType;
 
 class FormValidationExceptionTest extends \PHPUnit_Framework_TestCase
 {

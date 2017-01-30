@@ -17,7 +17,6 @@ class FormValidationException extends AbstractValidationException
     protected $form;
 
     /**
-     * FormValidationException constructor.
      * @param FormInterface $form
      * @param string $message
      * @param string $code

@@ -12,7 +12,6 @@ class ValidationException extends AbstractValidationException
     protected $fields;
 
     /**
-     * ValidationException constructor.
      * @param array $fields
      * @param string $message
      * @param string $code
@@ -33,7 +32,7 @@ class ValidationException extends AbstractValidationException
     {
         foreach ($fields as $field) {
             if (!$field instanceof ErrorField) {
-                throw new \InvalidArgumentException('$field must be an instance of ErrorField');
+                throw new \InvalidArgumentException('Every field must be an instance of ErrorField');
             }
             $this->fields[] = $field;
         }

@@ -292,6 +292,26 @@ class ResponseTransformerTest extends \PHPUnit_Framework_TestCase
         });
     }
 
+    public function testDebugGetSet()
+    {
+        $subject = $this->getSubject();
+
+        $this->assertFalse($subject->isDebug());
+        $subject->setDebug(true);
+        $this->assertTrue($subject->isDebug());
+
+        $subject = $this->getSubject(['debug' => true]);
+        $this->assertTrue($subject->isDebug());
+    }
+
+    public function testCreateResponseFromContent()
+    {
+        $subject = $this->getSubject();
+        $responseModel = $subject->createResponseFromContent('foo');
+
+        $this->assertInstanceOf(\MediaMonks\RestApi\Response\Response::class, $responseModel);
+    }
+
     protected function assertNoException($callback)
     {
         try {

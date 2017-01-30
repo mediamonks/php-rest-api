@@ -36,6 +36,11 @@
       "MediaMonks\\RestApi\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "tests\\MediaMonks\\RestApi\\": "tests/src/"
+    }
+  },
   "extra": {
     "branch-alias": {
       "dev-master": "1.0-dev"

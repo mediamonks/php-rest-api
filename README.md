@@ -25,6 +25,30 @@ very easy to extend it or implement your own.
 - Supports paginated responses
 - Supports wrapping json response in a method (jsonp) and post message
 
-# Documentation
+## Documentation
 
-Please refer to the files in the [/doc](/doc) folder.
+Documentation and examples can be found in the [/doc](/doc) folder.
+
+## System Requirements
+
+You need:
+
+- **PHP >= 5.4**
+
+To use the library.
+
+## Install
+
+Install this package by using Composer.
+
+```
+$ composer require mediamonks/rest-api
+```
+
+## Security
+
+If you discover any security related issues, please email devmonk@mediamonks.com instead of using the issue tracker.
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE) for more information.

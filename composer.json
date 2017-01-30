@@ -1,0 +1,43 @@
+{
+  "name": "mediamonks/rest-api",
+  "type": "library",
+  "description": "MediaMonks Rest API",
+  "keywords": [
+    "rest",
+    "api",
+    "bundle",
+    "symfony"
+  ],
+  "homepage": "https://www.mediamonks.com/",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Robert Slootjes",
+      "email": "robert@mediamonks.com",
+      "homepage": "https://github.com/slootjes"
+    }
+  ],
+  "require": {
+    "php": "^5.4|~7.0",
+    "symfony/dependency-injection": "^2.7|^3.0",
+    "symfony/http-kernel": "^2.7|^3.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^4.8",
+    "mockery/mockery": "^0.9.4",
+    "symfony/validator": "^3.2"
+  },
+  "suggest": {
+    "jms/serializer-bundle": "Use JMS Serializer as a serializer"
+  },
+  "autoload": {
+    "psr-4": {
+      "MediaMonks\\RestApi\\": "src/"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0-dev"
+    }
+  }
+}

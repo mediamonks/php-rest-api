@@ -9,15 +9,17 @@
 
 # MediaMonks Rest API
 
-This library contains an event subscriber to easily implement a Restful API with Symfony Http Kernel.
+This library contains an event subscriber to easily implement a Rest API with Symfony Http Kernel. By default this 
+library will output according to the MediaMonks Rest API spec since we believe it is very useful but of course it's 
+very easy to extend it or implement your own.
 
 ## Highlights
 
-- Converts scalars, arrays and objects to proper output
-- Converts exceptions to proper output
-- Supports application/json, application/x-www-form-urlencoded & multipart/form-data input
+- Scalars, arrays and objects will be converted automatically
+- Thrown exceptions will be converted automatically
 - Supports custom serializers like JMS, uses json serializer by default
 - Supports custom response models
+- Supports application/json, application/x-www-form-urlencoded & multipart/form-data input
 - Supports method overriding
 - Supports forcing a "200 OK" status method
 - Supports paginated responses

@@ -33,7 +33,7 @@ Documentation and examples can be found in the [/doc](/doc) folder.
 
 You need:
 
-- **PHP >= 5.4**
+- **PHP >= 5.5**
 
 To use the library.
 

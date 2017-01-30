@@ -3,7 +3,6 @@
 namespace MediaMonks\RestApi\Model;
 
 use MediaMonks\RestApi\Exception\AbstractValidationException;
-use MediaMonks\RestApi\Response\Error;
 use MediaMonks\RestApi\Response\PaginatedResponseInterface;
 use MediaMonks\RestApi\Util\StringUtil;
 use Symfony\Component\HttpFoundation\Response;

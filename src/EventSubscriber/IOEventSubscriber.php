@@ -2,10 +2,8 @@
 
 namespace MediaMonks\RestApi\EventSubscriber;
 
-use MediaMonks\RestApi\Model\ResponseModelFactory;
 use MediaMonks\RestApi\Request\RequestMatcherInterface;
 use MediaMonks\RestApi\Request\RequestTransformerInterface;
-use MediaMonks\RestApi\Response\Response as RestApiResponse;
 use MediaMonks\RestApi\Response\ResponseTransformerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;

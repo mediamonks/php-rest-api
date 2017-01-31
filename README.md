@@ -29,15 +29,13 @@ very easy to extend it or implement your own.
 
 Documentation and examples can be found in the [/doc](/doc) folder.
 
-## System Requirements
+## Requirements
 
-You need:
-
-- **PHP >= 5.4**
+- PHP >= 5.4
 
 To use the library.
 
-## Install
+## Installation
 
 For Symfony Framework users it is recommended to install the [Rest API Bundle](https://github.com/mediamonks/symfony-rest-api-bundle) instead of this library.
 

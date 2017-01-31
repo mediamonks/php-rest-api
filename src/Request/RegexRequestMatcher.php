@@ -5,10 +5,8 @@ namespace MediaMonks\RestApi\Request;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-class RequestMatcher implements RequestMatcherInterface
+class RegexRequestMatcher extends AbstractRequestMatcher
 {
-    const ATTRIBUTE_MATCHED = 'mediamonks_rest_api_matched';
-
     /**
      * @var array
      */
@@ -20,11 +18,10 @@ class RequestMatcher implements RequestMatcherInterface
     protected $blacklist = [];
 
     /**
-     * RequestMatcher constructor.
-     * @param $whitelist
+     * @param array $whitelist
      * @param array $blacklist
      */
-    public function __construct($whitelist, $blacklist = [])
+    public function __construct(array $whitelist = [], array $blacklist = [])
     {
         $this->whitelist = $whitelist;
         $this->blacklist = $blacklist;

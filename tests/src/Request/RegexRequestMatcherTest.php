@@ -2,16 +2,17 @@
 
 namespace tests\MediaMonks\RestApi\Request;
 
-use MediaMonks\RestApi\Request\RequestMatcher;
+use MediaMonks\RestApi\Request\AbstractRequestMatcher;
+use MediaMonks\RestApi\Request\RegexRequestMatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-class RequestMatcherTest extends \PHPUnit_Framework_TestCase
+class RegexRequestMatcherTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testMatchesEmptyWhitelist()
     {
-        $matcher = new RequestMatcher([]);
+        $matcher = new RegexRequestMatcher([]);
         foreach ([
                      ['path' => '/foo', 'type' => HttpKernelInterface::MASTER_REQUEST, 'result' => false],
                      ['path' => '/bar', 'type' => HttpKernelInterface::MASTER_REQUEST, 'result' => false],
@@ -26,7 +27,7 @@ class RequestMatcherTest extends \PHPUnit_Framework_TestCase
 
     public function testMatchesWhitelist()
     {
-        $matcher = new RequestMatcher([
+        $matcher = new RegexRequestMatcher([
             '~^/api$~',
             '~^/api/~'
         ]);
@@ -49,7 +50,7 @@ class RequestMatcherTest extends \PHPUnit_Framework_TestCase
 
     public function testMatchesWhitelistBlacklist()
     {
-        $matcher = new RequestMatcher([
+        $matcher = new RegexRequestMatcher([
             '~^/api$~',
             '~^/api/~'
         ], [
@@ -75,36 +76,36 @@ class RequestMatcherTest extends \PHPUnit_Framework_TestCase
 
     public function testMatchedRequestIsMarkedAsMatched()
     {
-        $matcher = new RequestMatcher(['~^/api$~']);
+        $matcher = new RegexRequestMatcher(['~^/api$~']);
         $request = $this->getRequestFromPath('/api');
 
         $this->assertEquals(true, $matcher->matches($request));
-        $this->assertTrue($request->attributes->has(RequestMatcher::ATTRIBUTE_MATCHED));
+        $this->assertTrue($request->attributes->has(AbstractRequestMatcher::ATTRIBUTE_MATCHED));
         $this->assertEquals(true, $matcher->matches($request));
     }
 
     public function testNonMatchedRequestIsNotMarkedAsMatched()
     {
-        $matcher = new RequestMatcher(['~^/api$~']);
+        $matcher = new RegexRequestMatcher(['~^/api$~']);
         $request = $this->getRequestFromPath('/');
 
         $this->assertEquals(false, $matcher->matches($request));
-        $this->assertFalse($request->attributes->has(RequestMatcher::ATTRIBUTE_MATCHED));
+        $this->assertFalse($request->attributes->has(AbstractRequestMatcher::ATTRIBUTE_MATCHED));
     }
 
     public function testMatchedRequestIsNotMatchedTwice()
     {
-        $matcher = new RequestMatcher(['~^/api$~']);
+        $matcher = new RegexRequestMatcher(['~^/api$~']);
         $request = $this->getRequestFromPath('/');
 
         $this->assertEquals(false, $matcher->matches($request));
-        $this->assertFalse($request->attributes->has(RequestMatcher::ATTRIBUTE_MATCHED));
+        $this->assertFalse($request->attributes->has(AbstractRequestMatcher::ATTRIBUTE_MATCHED));
         $this->assertEquals(false, $matcher->matches($request));
     }
 
     public function testMatchesAlreadyMatched()
     {
-        $subject = new RequestMatcher(['~^/api$~']);
+        $subject = new RegexRequestMatcher(['~^/api$~']);
         $request = $this->getRequestFromPath('/api');
 
         // First match, path 1

@@ -32,5 +32,7 @@ of the RestApiEventSubscriber. Make sure to add it to your event dispatcher as a
     $dispatcher = new EventDispatcher();
     $dispatcher->addSubscriber($eventSubscriber);
 
+More code and library examples can be found in the example dir.
+
 .. _`installation chapter`: https://getcomposer.org/doc/00-intro.md
 .. _`Symfony Rest API Bundle`: https://github.com/mediamonks/symfony-rest-api-bundle

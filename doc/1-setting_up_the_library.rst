@@ -25,10 +25,11 @@ of the RestApiEventSubscriber. Make sure to add it to your event dispatcher as a
 .. code-block:: php
 
     use MediaMonks\RestApi\EventSubscriber;
+    use Symfony\Component\EventDispatcher\EventDispatcher;
 
     $restApiEventSubscriber = RestApiEventSubscriberFactory::create();
 
-    $dispatcher = new Symfony\Component\EventDispatcher\EventDispatcher();
+    $dispatcher = new EventDispatcher();
     $dispatcher->addSubscriber($eventSubscriber);
 
 .. _`installation chapter`: https://getcomposer.org/doc/00-intro.md

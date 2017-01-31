@@ -39,6 +39,8 @@ To use the library.
 
 ## Install
 
+For Symfony Framework users it is recommended to install the [Rest API Bundle](https://github.com/mediamonks/symfony-rest-api-bundle) instead of this library.
+
 Install this package by using Composer.
 
 ```

@@ -18,7 +18,7 @@ $options = [
 $serializer = new MediaMonks\RestApi\Serializer\JsonSerializer();
 
 // initialize the request matcher with the whitelist and blacklist
-$requestMatcher = new MediaMonks\RestApi\Request\RequestMatcher($whitelist, $blacklist);
+$requestMatcher = new MediaMonks\RestApi\Request\RegexRequestMatcher($whitelist, $blacklist);
 
 // initialize the request transformer, this sets the output format as an attribute in the request
 $requestTransformer = new MediaMonks\RestApi\Request\RequestTransformer($serializer);

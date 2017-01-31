@@ -138,5 +138,4 @@ class RestApiEventSubscriber implements EventSubscriberInterface
     {
         return $this->requestMatcher->matches($event->getRequest(), $event->getRequestType());
     }
-
 }

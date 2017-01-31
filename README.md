@@ -24,6 +24,7 @@ very easy to extend it or implement your own.
 - Supports forcing a "200 OK" status method
 - Supports paginated responses
 - Supports wrapping json response in a method (jsonp) and post message
+- Should work with any framework that uses HttpKernel
 
 ## Documentation
 

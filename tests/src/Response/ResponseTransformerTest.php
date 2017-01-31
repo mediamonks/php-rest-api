@@ -309,7 +309,7 @@ class ResponseTransformerTest extends \PHPUnit_Framework_TestCase
         $subject = $this->getSubject();
         $responseModel = $subject->createResponseFromContent('foo');
 
-        $this->assertInstanceOf(\MediaMonks\RestApi\Response\Response::class, $responseModel);
+        $this->assertInstanceOf('MediaMonks\RestApi\Response\Response', $responseModel);
     }
 
     protected function assertNoException($callback)

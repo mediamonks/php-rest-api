@@ -42,14 +42,14 @@ class FormValidationExceptionTest extends \PHPUnit_Framework_TestCase
 
     public function testToArray()
     {
-        $form = m::mock(FormInterface::class);
+        $form = m::mock('Symfony\Component\Form\FormInterface');
         $form->shouldReceive('isRoot')->andReturn(true);
         $form->shouldReceive('getErrors')->andReturn(new FormErrorIterator($form, [
             new FormError('General Error'),
             new FormError('CSRF Error')
         ]));
 
-        $childForm = m::mock(FormInterface::class);
+        $childForm = m::mock('Symfony\Component\Form\FormInterface');
         $childForm->shouldReceive('isRoot')->andReturn(false);
         $childForm->shouldReceive('isValid')->andReturn(false);
         $childForm->shouldReceive('getName')->andReturn('name');

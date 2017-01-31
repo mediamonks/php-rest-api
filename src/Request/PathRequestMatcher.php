@@ -9,6 +9,6 @@ class PathRequestMatcher extends RegexRequestMatcher
      */
     public function __construct($path)
     {
-        parent::__construct([sprintf('~^/%s~', $path), sprintf('~^/%s/~', $path)]);
+        parent::__construct([sprintf('~^%s~', $path), sprintf('~^%s/~', $path)]);
     }
 }

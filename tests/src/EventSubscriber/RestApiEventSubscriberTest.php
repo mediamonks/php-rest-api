@@ -2,17 +2,17 @@
 
 namespace tests\MediaMonks\RestApi\EventSubscriber;
 
-use MediaMonks\RestApi\EventSubscriber\IOEventSubscriber;
+use MediaMonks\RestApi\EventSubscriber\RestApiEventSubscriber;
 use MediaMonks\RestApi\Response\Response;
 use \Mockery as m;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class IOEventSubscriberTest extends \PHPUnit_Framework_TestCase
+class RestApiEventSubscriberTest extends \PHPUnit_Framework_TestCase
 {
     protected function getSubject($mocks = null)
     {
         list($matcher, $requestTransformer, $responseTransformer) = $mocks ?: $this->getMocks();
-        return new IOEventSubscriber($matcher, $requestTransformer, $responseTransformer);
+        return new RestApiEventSubscriber($matcher, $requestTransformer, $responseTransformer);
     }
 
     protected function getMocks()
@@ -27,7 +27,7 @@ class IOEventSubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSubscribedEvents()
     {
-        $subscribedEvents = IOEventSubscriber::getSubscribedEvents();
+        $subscribedEvents = RestApiEventSubscriber::getSubscribedEvents();
 
         $this->assertArrayHasKey(KernelEvents::REQUEST, $subscribedEvents);
         $this->assertArrayHasKey(KernelEvents::EXCEPTION, $subscribedEvents);
@@ -284,7 +284,7 @@ class IOEventSubscriberTest extends \PHPUnit_Framework_TestCase
 
     protected function methodIsBound($method, $testEvent)
     {
-        foreach (IOEventSubscriber::getSubscribedEvents() as $event => $listeners) {
+        foreach (RestApiEventSubscriber::getSubscribedEvents() as $event => $listeners) {
             foreach ($listeners as $listener) {
                 list ($listener) = $listener;
                 if ($listener == $method && $event == $testEvent) {

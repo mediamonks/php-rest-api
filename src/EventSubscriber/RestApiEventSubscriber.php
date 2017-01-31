@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class IOEventSubscriber implements EventSubscriberInterface
+class RestApiEventSubscriber implements EventSubscriberInterface
 {
     /**
      * @var RequestMatcherInterface

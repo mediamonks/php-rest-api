@@ -38,7 +38,7 @@ class RestApiEventSubscriberFactory
         }
 
         $requestTransformer = new RequestTransformer($options['serializer']);
-        $responseModelFactory = new ResponseModelFactory($options['responseModel']);
+        $responseModelFactory = new ResponseModelFactory($options['response_model']);
         $responseTransformer = new ResponseTransformer(
             $options['serializer'],
             $responseModelFactory,

@@ -3,6 +3,7 @@
 namespace tests\MediaMonks\RestApi\EventSubscriber;
 
 use MediaMonks\RestApi\EventSubscriber\RestApiEventSubscriberFactory;
+use Mockery as m;
 
 class RestApiEventSubscriberFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,8 +15,11 @@ class RestApiEventSubscriberFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateWithOptions()
     {
-        $eventSubscriber = RestApiEventSubscriberFactory::create('/api',
-            ['debug' => true, 'post_message_origin' => 'https://www.mediamonks.com']
+        $eventSubscriber = RestApiEventSubscriberFactory::create(
+            [
+                'debug' => true,
+                'post_message_origin' => 'https://www.mediamonks.com'
+            ]
         );
         $this->assertInstanceOf('MediaMonks\RestApi\EventSubscriber\RestApiEventSubscriber', $eventSubscriber);
     }

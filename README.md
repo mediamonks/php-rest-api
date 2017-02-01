@@ -28,7 +28,7 @@ very easy to extend it or implement your own.
 
 ## Documentation
 
-Documentation and examples can be found in the [/doc](/doc) folder.
+Documentation and examples can be found in the [/docs](/docs) folder.
 
 ## Requirements
 

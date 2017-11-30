@@ -6,6 +6,7 @@ php:
     - 5.6
     - 7.0
     - 7.1
+    - 7.2
 
 matrix:
   include:
@@ -38,6 +39,10 @@ matrix:
     - php: 7.1
       env: SYMFONY_VERSION=3.4.*@dev
     - php: 7.1
+      env: SYMFONY_VERSION=4.0.*@dev
+    - php: 7.2
+      env: SYMFONY_VERSION=3.4.*@dev
+    - php: 7.2
       env: SYMFONY_VERSION=4.0.*@dev
 
 sudo: false

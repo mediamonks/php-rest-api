@@ -9,8 +9,8 @@
 
 # MediaMonks Rest API
 
-This library contains an event subscriber to easily implement a Rest API with the [Symfony HttpKernel](http://symfony.com/doc/current/components/http_kernel.html). 
-By default this library will output according to the [MediaMonks Rest API spec](https://github.com/mediamonks/documents) since we believe it is very useful for any other company too but of course it's very easy to extend it or implement your own.
+This library contains an event subscriber to easily create a Rest API with the [Symfony HttpKernel](http://symfony.com/doc/current/components/http_kernel.html). 
+By default this library will output according to our [MediaMonks Rest API spec](https://github.com/mediamonks/documents) but since we believe it could be very useful for other companies too it's very easy to extend it or implement your own.
 
 ## Highlights
 

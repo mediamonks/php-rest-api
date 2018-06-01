@@ -6,6 +6,7 @@ use MediaMonks\RestApi\Model\ResponseModel;
 use MediaMonks\RestApi\Request\Format;
 use MediaMonks\RestApi\Response\ResponseTransformer;
 use \Mockery as m;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ResponseTransformerTest extends \PHPUnit_Framework_TestCase
@@ -73,6 +74,7 @@ class ResponseTransformerTest extends \PHPUnit_Framework_TestCase
         $request->shouldReceive('getRequestFormat')->andReturn(Format::FORMAT_XML);;
 
         $response = m::mock('Symfony\Component\HttpFoundation\Response');
+        $response->shouldReceive('getStatusCode')->andReturn(Response::HTTP_OK);
         $response->shouldReceive('setCallback');
 
         $subject->transformLate($request, $response);
@@ -98,6 +100,7 @@ class ResponseTransformerTest extends \PHPUnit_Framework_TestCase
         $request->query->shouldReceive('get')->andReturn(ResponseTransformer::WRAPPER_POST_MESSAGE);
 
         $response = m::mock('MediaMonks\RestApi\Response\JsonResponse');
+        $response->shouldReceive('getStatusCode')->andReturn(Response::HTTP_OK);
         $response->shouldReceive('setContent')->andReturnSelf();
         $response->shouldReceive('getContent')->andReturn('foo');
 
@@ -125,6 +128,7 @@ class ResponseTransformerTest extends \PHPUnit_Framework_TestCase
         $request->query->shouldReceive('get');
 
         $response = m::mock('MediaMonks\RestApi\Response\JsonResponse');
+        $response->shouldReceive('getStatusCode')->andReturn(Response::HTTP_OK);
         $response->shouldReceive('setCallback');
 
         $subject->transformLate($request, $response);
@@ -173,6 +177,20 @@ class ResponseTransformerTest extends \PHPUnit_Framework_TestCase
 
     public function testTransformEarlyForceHttpOk()
     {
+        $subject = $this->getSubject();
+
+        $request = new Request();
+        $response = new Response('foo', Response::HTTP_NO_CONTENT);
+        $response->headers->set('Content-Type', 'text/html');
+
+        $subject->transformLate($request, $response);
+
+        $this->assertEmpty($response->getContent());
+        $this->assertFalse($response->headers->has('Content-Type'));
+    }
+
+    public function testForceEmptyResponseOnHttpNoContent()
+    {
         // Get SUT
         $subject = $this->getSubject();
 
@@ -187,7 +205,7 @@ class ResponseTransformerTest extends \PHPUnit_Framework_TestCase
         $request->query->shouldReceive('has')->andReturn(false);
 
         $responseModel = m::mock('MediaMonks\RestApi\Model\ResponseModel');
-        $responseModel->shouldReceive('getStatusCode')->andReturn(Response::HTTP_CONFLICT);
+        $responseModel->shouldReceive('getStatusCode')->andReturn(Response::HTTP_NO_CONTENT);
         $responseModel->shouldReceive('setReturnStatusCode');
         $responseModel->shouldReceive('setReturnStackTrace');
         $responseModel->shouldReceive('toArray');

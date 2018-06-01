@@ -12,10 +12,13 @@ use Symfony\Component\HttpFoundation\JsonResponse as SymfonyJsonResponse;
 
 class ResponseTransformer implements ResponseTransformerInterface
 {
+
     const WRAPPER_PADDING = 'padding';
+
     const WRAPPER_POST_MESSAGE = 'postMessage';
 
     const PARAMETER_CALLBACK = 'callback';
+
     const PARAMETER_WRAPPER = '_wrapper';
 
     /**
@@ -77,6 +80,7 @@ class ResponseTransformer implements ResponseTransformerInterface
 
     /**
      * @param boolean $debug
+     *
      * @return ResponseTransformer
      */
     public function setDebug($debug)
@@ -96,6 +100,7 @@ class ResponseTransformer implements ResponseTransformerInterface
 
     /**
      * @param string $postMessageOrigin
+     *
      * @return ResponseTransformer
      */
     public function setPostMessageOrigin($postMessageOrigin)
@@ -108,6 +113,7 @@ class ResponseTransformer implements ResponseTransformerInterface
     /**
      * @param Request $request
      * @param SymfonyResponse $response
+     *
      * @return SymfonyResponse
      */
     public function transformEarly(Request $request, SymfonyResponse $response)
@@ -115,13 +121,19 @@ class ResponseTransformer implements ResponseTransformerInterface
         $responseModel = $response->getContent();
 
         if (!$responseModel instanceof ResponseModelInterface) {
-            $responseModel = $this->responseModelFactory->createFromContent($response);
+            $responseModel = $this->responseModelFactory->createFromContent(
+                $response
+            );
         }
 
         $responseModel->setReturnStackTrace($this->isDebug());
         $response->setStatusCode($responseModel->getStatusCode());
         $this->forceStatusCodeHttpOK($request, $response, $responseModel);
-        $response = $this->createSerializedResponse($request, $response, $responseModel);
+        $response = $this->createSerializedResponse(
+            $request,
+            $response,
+            $responseModel
+        );
 
         return $response;
     }
@@ -138,19 +150,25 @@ class ResponseTransformer implements ResponseTransformerInterface
         ) {
             $this->wrapResponse($request, $response);
         }
+
+        $this->forceEmptyResponseOnHttpNoContent($response);
     }
 
     /**
      * @param $data
+     *
      * @return Response
      */
     public function createResponseFromContent($data)
     {
-        return new Response($this->responseModelFactory->createFromContent($data));
+        return new Response(
+            $this->responseModelFactory->createFromContent($data)
+        );
     }
 
     /**
-     * Check if we should put the status code in the output and force a 200 OK in the header
+     * Check if we should put the status code in the output and force a 200 OK
+     * in the header
      *
      * @param Request $request
      * @param SymfonyResponse $response
@@ -162,7 +180,10 @@ class ResponseTransformer implements ResponseTransformerInterface
         ResponseModelInterface $responseModel
     ) {
         if ($request->headers->has('X-Force-Status-Code-200')
-            || ($request->getRequestFormat() == Format::FORMAT_JSON && $request->query->has(self::PARAMETER_CALLBACK))
+            || ($request->getRequestFormat(
+                ) == Format::FORMAT_JSON && $request->query->has(
+                    self::PARAMETER_CALLBACK
+                ))
         ) {
             $responseModel->setReturnStatusCode(true);
             $response->setStatusCode(Response::HTTP_OK);
@@ -171,9 +192,24 @@ class ResponseTransformer implements ResponseTransformerInterface
     }
 
     /**
+     * Make sure content is empty when the status code is "204 NoContent"
+     *
+     * @param SymfonyResponse $response
+     */
+    protected function forceEmptyResponseOnHttpNoContent(
+        SymfonyResponse $response
+    ) {
+        if ($response->getStatusCode() === Response::HTTP_NO_CONTENT) {
+            $response->setContent(null);
+            $response->headers->remove('Content-Type');
+        }
+    }
+
+    /**
      * @param Request $request
      * @param SymfonyResponse $response
      * @param ResponseModelInterface $responseModel
+     *
      * @return SymfonyResponse
      */
     protected function createSerializedResponse(
@@ -201,13 +237,19 @@ class ResponseTransformer implements ResponseTransformerInterface
      * @param Request $request
      * @param SymfonyResponse $response
      * @param ResponseModelInterface $responseModel
+     *
      * @return JsonResponse|SymfonyResponse
      */
-    protected function serialize(Request $request, SymfonyResponse $response, ResponseModelInterface $responseModel)
-    {
+    protected function serialize(
+        Request $request,
+        SymfonyResponse $response,
+        ResponseModelInterface $responseModel
+    ) {
         switch ($request->getRequestFormat()) {
             case Format::FORMAT_XML:
-                $response->setContent($this->getSerializedContent($request, $responseModel));
+                $response->setContent(
+                    $this->getSerializedContent($request, $responseModel)
+                );
                 break;
             default:
                 $headers = $response->headers;
@@ -225,16 +267,23 @@ class ResponseTransformer implements ResponseTransformerInterface
     /**
      * @param Request $request
      * @param ResponseModelInterface $responseModel
+     *
      * @return mixed|string
      */
-    protected function getSerializedContent(Request $request, ResponseModelInterface $responseModel)
-    {
-        return $this->serializer->serialize($responseModel->toArray(), $request->getRequestFormat());
+    protected function getSerializedContent(
+        Request $request,
+        ResponseModelInterface $responseModel
+    ) {
+        return $this->serializer->serialize(
+            $responseModel->toArray(),
+            $request->getRequestFormat()
+        );
     }
 
     /**
      * @param Request $request
      * @param JsonResponse $response
+     *
      * @throws \Exception
      */
     protected function wrapResponse(Request $request, JsonResponse $response)
@@ -251,13 +300,16 @@ class ResponseTransformer implements ResponseTransformerInterface
                 )->headers->set('Content-Type', 'text/html');
                 break;
             default:
-                $response->setCallback($request->query->get(self::PARAMETER_CALLBACK));
+                $response->setCallback(
+                    $request->query->get(self::PARAMETER_CALLBACK)
+                );
                 break;
         }
     }
 
     /**
      * @param Request $request
+     *
      * @return string
      */
     protected function getCallbackFromRequest(Request $request)

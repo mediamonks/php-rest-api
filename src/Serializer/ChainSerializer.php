@@ -14,7 +14,7 @@ class ChainSerializer implements SerializerInterface
     /**
      * @var SerializerInterface[]
      */
-    private $serializers;
+    private $serializers = [];
 
     /**
      * @var array

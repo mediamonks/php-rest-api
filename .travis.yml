@@ -40,7 +40,7 @@ before_install:
   - if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/http-kernel:${SYMFONY_VERSION}" --no-update; fi;
   - if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/validator:${SYMFONY_VERSION}" --no-update; fi;
   - if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/form:${SYMFONY_VERSION}" --no-update; fi;
-  - if [ "$TRAVIS_PHP_VERSION" == "7.2" ] && [ "$SYMFONY_VERSION" == "4.3.*" ]; then then composer require "codeclimate/php-test-reporter:dev-master@dev" --no-update; fi;
+  - if [ "$TRAVIS_PHP_VERSION" == "7.2" ] && [ "$SYMFONY_VERSION" == "4.3.*" ]; then composer require "codeclimate/php-test-reporter:dev-master@dev" --no-update; fi;
 
 install:
   - composer update --prefer-source $COMPOSER_FLAGS

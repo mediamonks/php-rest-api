@@ -33,58 +33,38 @@ Create a module "mediamonks_rest_api" with these files:
 
 .. code-block:: yml
 
-    # mediamonks_rest_api.services.yml
-    parameters:
-        mediamonks_rest_api.rest_api_event_subscriber.class: MediaMonks\RestApi\EventSubscriber\RestApiEventSubscriber
-        mediamonks_rest_api.path_request_matcher.class: MediaMonks\RestApi\Request\PathRequestMatcher
-        mediamonks_rest_api.regex_request_matcher.class: MediaMonks\RestApi\Request\RegexRequestMatcher
-        mediamonks_rest_api.request_transformer.class: MediaMonks\RestApi\Request\RequestTransformer
-        mediamonks_rest_api.response_transformer.class: MediaMonks\RestApi\Response\ResponseTransformer
-        mediamonks_rest_api.serializer.jms.class: MediaMonks\RestApi\Serializer\JMSSerializer
-        mediamonks_rest_api.serializer.json.class: MediaMonks\RestApi\Serializer\JsonSerializer
-        mediamonks_rest_api.serializer.msgpack.class: MediaMonks\RestApi\Serializer\MsgpackSerializer
-        mediamonks_rest_api.response_model.class: MediaMonks\RestApi\Model\ResponseModel
-        mediamonks_rest_api.response_model_factory.class: MediaMonks\RestApi\Model\ResponseModelFactory
-
     services:
-        mediamonks_rest_api.rest_api_event_subscriber:
-            class: '%mediamonks_rest_api.rest_api_event_subscriber.class%'
-            arguments:
-                - '@mediamonks_rest_api.request_matcher'
-                - '@mediamonks_rest_api.request_transformer'
-                - '@mediamonks_rest_api.response_transformer'
-                - '@mediamonks_rest_api.response_model_factory'
-            tags:
-                - { name: event_subscriber }
+      MediaMonks\RestApi\EventSubscriber\RestApiEventSubscriber:
+        autowire: true
+        tags:
+          - { name: event_subscriber }
 
-        mediamonks_rest_api.request_matcher:
-            class: '%mediamonks_rest_api.path_request_matcher.class%'
-            arguments: ['/api']
+      MediaMonks\RestApi\Request\PathRequestMatcher:
+        public: false
+        arguments:
+          - '/api'
 
-        mediamonks_rest_api.request_transformer:
-            class: '%mediamonks_rest_api.request_transformer.class%'
-            arguments:
-                - '@mediamonks_rest_api.serializer.json'
+      MediaMonks\RestApi\Request\RequestTransformer:
+        public: false
+        autowire: true
 
-        mediamonks_rest_api.response_transformer:
-            class: '%mediamonks_rest_api.response_transformer.class%'
-            arguments:
-                - '@mediamonks_rest_api.serializer.json'
-                - '@mediamonks_rest_api.response_model_factory'
-                - []
+      MediaMonks\RestApi\Response\ResponseTransformer:
+        public: false
+        autowire: true
 
-        mediamonks_rest_api.serializer.json:
-            class: '%mediamonks_rest_api.serializer.json.class%'
+      MediaMonks\RestApi\Serializer\JsonSerializer:
+        public: false
 
-        mediamonks_rest_api.response_model:
-            class: '%mediamonks_rest_api.response_model.class%'
+      MediaMonks\RestApi\Model\ResponseModel:
+        public: false
 
-        mediamonks_rest_api.response_model_factory:
-            class: '%mediamonks_rest_api.response_model_factory.class%'
-            arguments:
-                - '@mediamonks_rest_api.response_model'
+      MediaMonks\RestApi\Model\ResponseModelFactory:
+        public: false
+        autowire: true
 
 
 Then activate the module, clear caches and start creating controllers which start with /api for it to take effect.
+
+Please note this example uses autowiring which is available since Drupal 8.5
 
 .. _`installation chapter`: https://getcomposer.org/doc/00-intro.md

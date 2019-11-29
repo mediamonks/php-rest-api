@@ -6,11 +6,15 @@ use MediaMonks\RestApi\Request\RequestMatcherInterface;
 use MediaMonks\RestApi\Request\RequestTransformerInterface;
 use MediaMonks\RestApi\Response\ResponseTransformerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
+use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 class RestApiEventSubscriber implements EventSubscriberInterface
@@ -68,9 +72,9 @@ class RestApiEventSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param GetResponseEvent $event
+     * @param RequestEvent $event
      */
-    public function onRequest(GetResponseEvent $event)
+    public function onRequest(RequestEvent $event)
     {
         if (!$this->eventRequestMatches($event)) {
             return;
@@ -81,22 +85,22 @@ class RestApiEventSubscriber implements EventSubscriberInterface
     /**
      * convert exception to rest api response
      *
-     * @param GetResponseForExceptionEvent $event
+     * @param ExceptionEvent $event
      */
-    public function onException(GetResponseForExceptionEvent $event)
+    public function onException(ExceptionEvent $event)
     {
         if (!$this->eventRequestMatches($event)) {
             return;
         }
-        $event->setResponse($this->responseTransformer->createResponseFromContent($event->getException()));
+        $event->setResponse($this->responseTransformer->createResponseFromContent($event->getThrowable()));
     }
 
     /**
      * convert response to rest api response
      *
-     * @param GetResponseForControllerResultEvent $event
+     * @param ViewEvent $event
      */
-    public function onView(GetResponseForControllerResultEvent $event)
+    public function onView(ViewEvent $event)
     {
         if (!$this->eventRequestMatches($event)) {
             return;
@@ -107,9 +111,9 @@ class RestApiEventSubscriber implements EventSubscriberInterface
     /**
      * converts content to correct output format
      *
-     * @param FilterResponseEvent $event
+     * @param ResponseEvent $event
      */
-    public function onResponseEarly(FilterResponseEvent $event)
+    public function onResponseEarly(ResponseEvent $event)
     {
         if (!$this->eventRequestMatches($event)) {
             return;
@@ -120,9 +124,9 @@ class RestApiEventSubscriber implements EventSubscriberInterface
     /**
      * wrap the content if needed
      *
-     * @param FilterResponseEvent $event
+     * @param ResponseEvent $event
      */
-    public function onResponseLate(FilterResponseEvent $event)
+    public function onResponseLate(ResponseEvent $event)
     {
         if (!$this->eventRequestMatches($event)) {
             return;

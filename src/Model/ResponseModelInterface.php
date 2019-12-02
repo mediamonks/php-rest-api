@@ -20,10 +20,11 @@ interface ResponseModelInterface
     public function setPagination(PaginatedResponseInterface $paginatedResponse);
 
     /**
-     * @param \Exception $exception
+     * @param \Throwable $throwable
+     *
      * @return ResponseModelInterface
      */
-    public function setException(\Exception $exception);
+    public function setThrowable(\Throwable $throwable);
 
     /**
      * @param mixed $data

@@ -32,8 +32,8 @@ class ResponseModelFactory
         if ($content instanceof PaginatedResponseInterface) {
             return $this->createFromPaginatedResponse($content);
         }
-        if ($content instanceof \Exception) {
-            return $this->createFromException($content);
+        if ($content instanceof \Throwable) {
+            return $this->createFromThrowable($content);
         }
 
         return $this->create()->setData($content);
@@ -58,12 +58,13 @@ class ResponseModelFactory
     }
 
     /**
-     * @param \Exception $exception
+     * @param \Throwable $throwable
+     *
      * @return ResponseModelInterface
      */
-    public function createFromException(\Exception $exception)
+    public function createFromThrowable(\Throwable $throwable)
     {
-        return $this->create()->setException($exception);
+        return $this->create()->setThrowable($throwable);
     }
 
     /**

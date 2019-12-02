@@ -22,8 +22,8 @@ class ResponseModelTest extends \PHPUnit_Framework_TestCase
     {
         $exception         = new \Exception;
         $responseContainer = new ResponseModel();
-        $responseContainer->setException($exception);
-        $this->assertEquals($exception, $responseContainer->getException());
+        $responseContainer->setThrowable($exception);
+        $this->assertEquals($exception, $responseContainer->getThrowable());
     }
 
     public function testLocationGettersSetter()
@@ -68,7 +68,7 @@ class ResponseModelTest extends \PHPUnit_Framework_TestCase
 
         $responseContainer = new ResponseModel();
         $responseContainer->setStatusCode($statusCode);
-        $responseContainer->setException($exception);
+        $responseContainer->setThrowable($exception);
 
         $this->assertEquals($code, $responseContainer->getStatusCode());
     }
@@ -96,7 +96,7 @@ class ResponseModelTest extends \PHPUnit_Framework_TestCase
         $mockException->shouldReceive('getFields');
 
         $responseContainer = new ResponseModel();
-        $responseContainer->setException($mockException);
+        $responseContainer->setThrowable($mockException);
 
         $this->assertEquals(['error' => $error], $responseContainer->toArray());
     }
@@ -104,7 +104,7 @@ class ResponseModelTest extends \PHPUnit_Framework_TestCase
     public function testReturnStackTraceEnabled()
     {
         $responseContainer = new ResponseModel();
-        $responseContainer->setException(new \Exception('Test'));
+        $responseContainer->setThrowable(new \Exception('Test'));
         $responseContainer->setReturnStackTrace(true);
 
         $this->assertTrue($responseContainer->isReturnStackTrace());
@@ -117,7 +117,7 @@ class ResponseModelTest extends \PHPUnit_Framework_TestCase
     public function testReturnStackTraceDisabled()
     {
         $responseContainer = new ResponseModel();
-        $responseContainer->setException(new \Exception('Test'));
+        $responseContainer->setThrowable(new \Exception('Test'));
         $responseContainer->setReturnStackTrace(false);
 
         $this->assertFalse($responseContainer->isReturnStackTrace());

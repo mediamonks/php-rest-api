@@ -36,9 +36,9 @@ abstract class AbstractResponseModel
     protected $response;
 
     /**
-     * @var \Exception
+     * @var \Throwable
      */
-    protected $exception;
+    protected $throwable;
 
     /**
      * @var PaginatedResponseInterface
@@ -69,7 +69,7 @@ abstract class AbstractResponseModel
      */
     public function getStatusCode()
     {
-        if (isset($this->exception)) {
+        if (isset($this->throwable)) {
             return $this->getExceptionStatusCode();
         }
         if ($this->isEmpty()) {
@@ -84,14 +84,14 @@ abstract class AbstractResponseModel
      */
     protected function getExceptionStatusCode()
     {
-        if ($this->exception instanceof HttpException) {
-            return $this->exception->getStatusCode();
+        if ($this->throwable instanceof HttpException) {
+            return $this->throwable->getStatusCode();
         }
-        if ($this->exception instanceof AbstractValidationException) {
+        if ($this->throwable instanceof AbstractValidationException) {
             return Response::HTTP_BAD_REQUEST;
         }
-        if ($this->isValidHttpStatusCode($this->exception->getCode())) {
-            return $this->exception->getCode();
+        if ($this->isValidHttpStatusCode($this->throwable->getCode())) {
+            return $this->throwable->getCode();
         }
 
         return Response::HTTP_INTERNAL_SERVER_ERROR;
@@ -111,18 +111,18 @@ abstract class AbstractResponseModel
      * @param string $trim
      * @return string
      */
-    protected function getExceptionErrorCode($errorCode, $trim = null)
+    protected function getThrowableErrorCode($errorCode, $trim = null)
     {
-        return sprintf($errorCode, StringUtil::classToSnakeCase($this->exception, $trim));
+        return sprintf($errorCode, StringUtil::classToSnakeCase($this->throwable, $trim));
     }
 
     /**
      * @return string
      */
-    protected function getExceptionStackTrace()
+    protected function getThrowableStackTrace()
     {
         $traces = [];
-        foreach ($this->exception->getTrace() as $trace) {
+        foreach ($this->throwable->getTrace() as $trace) {
             $trace['args'] = json_decode(json_encode($trace['args']), true);
             $traces[] = $trace;
         }
@@ -182,18 +182,19 @@ abstract class AbstractResponseModel
     /**
      * @return \Exception
      */
-    public function getException()
+    public function getThrowable()
     {
-        return $this->exception;
+        return $this->throwable;
     }
 
     /**
-     * @param \Exception $exception
+     * @param \Throwable $throwable
+     *
      * @return $this
      */
-    public function setException(\Exception $exception)
+    public function setThrowable(\Throwable $throwable)
     {
-        $this->exception = $exception;
+        $this->throwable = $throwable;
 
         return $this;
     }
@@ -245,7 +246,7 @@ abstract class AbstractResponseModel
     public function isEmpty()
     {
         return (
-            !isset($this->exception)
+            !isset($this->throwable)
             && is_null($this->data)
             && !isset($this->pagination)
             && $this->isEmptyResponse()

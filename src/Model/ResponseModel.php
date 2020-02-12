@@ -6,6 +6,7 @@ use MediaMonks\RestApi\Exception\ExceptionInterface;
 use MediaMonks\RestApi\Response\Error;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use JsonSerializable;
 
 class ResponseModel extends AbstractResponseModel
     implements ResponseModelInterface
@@ -62,6 +63,8 @@ class ResponseModel extends AbstractResponseModel
             $error = $this->throwable->toArray();
         } elseif ($this->throwable instanceof HttpException) {
             $error = $this->httpExceptionToArray();
+        } elseif ($this->throwable instanceof JsonSerializable) {
+            $error = $this->throwable->jsonSerialize();
         } else {
             $error = $this->generalThrowableToArray();
         }

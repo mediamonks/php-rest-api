@@ -140,6 +140,8 @@ class RestApiEventSubscriber implements EventSubscriberInterface
      */
     protected function eventRequestMatches(KernelEvent $event)
     {
+        if ($event->getRequest()->getMethod() === 'OPTIONS') return false;
+
         return $this->requestMatcher->matches($event->getRequest(), $event->getRequestType());
     }
 }

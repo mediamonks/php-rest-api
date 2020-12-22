@@ -123,7 +123,12 @@ abstract class AbstractResponseModel
     {
         $traces = [];
         foreach ($this->throwable->getTrace() as $trace) {
-            $trace['args'] = json_decode(json_encode($trace['args']), true);
+            // Since PHP 7.4 the args key got disabled, to enable it again:
+            // zend.exception_ignore_args = On
+            if (array_key_exists('args', $trace)) {
+                $trace['args'] = json_decode(json_encode($trace['args']), true);
+            }
+
             $traces[] = $trace;
         }
 
@@ -262,6 +267,7 @@ abstract class AbstractResponseModel
     }
 
     // @codeCoverageIgnoreStart
+
     /**
      * This is called when an exception is thrown during the response transformation
      *

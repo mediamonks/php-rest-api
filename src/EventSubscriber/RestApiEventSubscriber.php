@@ -6,11 +6,8 @@ use MediaMonks\RestApi\Request\RequestMatcherInterface;
 use MediaMonks\RestApi\Request\RequestTransformerInterface;
 use MediaMonks\RestApi\Response\ResponseTransformerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Event\KernelEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
@@ -140,7 +137,7 @@ class RestApiEventSubscriber implements EventSubscriberInterface
      */
     protected function eventRequestMatches(KernelEvent $event)
     {
-        if ($event->getRequest()->getMethod() === 'OPTIONS') return false;
+        if ($event->getRequest()->getMethod() === Request::METHOD_OPTIONS) return false;
 
         return $this->requestMatcher->matches($event->getRequest(), $event->getRequestType());
     }

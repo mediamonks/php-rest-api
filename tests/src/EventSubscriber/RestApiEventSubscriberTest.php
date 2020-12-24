@@ -69,10 +69,11 @@ class RestApiEventSubscriberTest extends \PHPUnit_Framework_TestCase
             [$matcher, $requestTransformer, $responseTransformer]
         );
 
+        $request = m::mock(Request::class);
+        $request->shouldReceive('getMethod')->andReturn(Request::METHOD_GET);
+
         $mockEvent = m::mock(RequestEvent::class);
-        $mockEvent->shouldReceive('getRequest')->andReturn(
-            m::mock(Request::class)
-        );
+        $mockEvent->shouldReceive('getRequest')->andReturn($request);
         $mockEvent->shouldReceive('getRequestType');
 
         $subject->onRequest($mockEvent);
@@ -98,6 +99,7 @@ class RestApiEventSubscriberTest extends \PHPUnit_Framework_TestCase
 
         $kernel = m::mock(HttpKernel::class);
         $request = m::mock(Request::class);
+        $request->shouldReceive('getMethod')->andReturn(Request::METHOD_GET);
 
         $event = new RequestEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
@@ -105,6 +107,36 @@ class RestApiEventSubscriberTest extends \PHPUnit_Framework_TestCase
 
         try {
             $requestTransformer->shouldHaveReceived('transform')->between(1, 1);
+            $this->assertTrue(true);
+        } catch (\Exception $e) {
+            $this->assertTrue(false, $e->getMessage());
+        }
+    }
+
+    public function testOnRequestOptionMethod()
+    {
+        [$matcher, $requestTransformer, $responseTransformer] = $this->getMocks();
+        $matcher->shouldReceive('matches')->andReturn(true);
+        $requestTransformer->shouldReceive('transform');
+
+        $subject = $this->getSubject(
+            [$matcher, $requestTransformer, $responseTransformer]
+        );
+
+        $kernel = m::mock(HttpKernel::class);
+        $request = m::mock(Request::class);
+
+        $request->shouldReceive('setMethod')->andReturn(Request::METHOD_OPTIONS);
+        $request->shouldReceive('getMethod')->andReturn(Request::METHOD_OPTIONS);
+
+        $request->setMethod(Request::METHOD_OPTIONS);
+
+        $event = new RequestEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+
+        $subject->onRequest($event);
+
+        try {
+            $requestTransformer->shouldNotHaveReceived('transform');
             $this->assertTrue(true);
         } catch (\Exception $e) {
             $this->assertTrue(false, $e->getMessage());
@@ -128,6 +160,8 @@ class RestApiEventSubscriberTest extends \PHPUnit_Framework_TestCase
 
         $kernel = m::mock(HttpKernel::class);
         $request = m::mock(Request::class);
+        $request->shouldReceive('getMethod')->andReturn(Request::METHOD_GET);
+
         $e = new \Exception();
 
         $event = new ExceptionEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST, $e);
@@ -153,6 +187,8 @@ class RestApiEventSubscriberTest extends \PHPUnit_Framework_TestCase
 
         $kernel = m::mock(HttpKernel::class);
         $request = m::mock(Request::class);
+        $request->shouldReceive('getMethod')->andReturn(Request::METHOD_GET);
+
         $e = new \Exception();
 
         $event = new ExceptionEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST, $e);
@@ -183,6 +219,7 @@ class RestApiEventSubscriberTest extends \PHPUnit_Framework_TestCase
 
         $kernel = m::mock(HttpKernel::class);
         $request = m::mock(Request::class);
+        $request->shouldReceive('getMethod')->andReturn(Request::METHOD_GET);
 
         $event = new ViewEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST, 'foo');
 
@@ -208,6 +245,7 @@ class RestApiEventSubscriberTest extends \PHPUnit_Framework_TestCase
 
         $kernel = m::mock(HttpKernel::class);
         $request = m::mock(Request::class);
+        $request->shouldReceive('getMethod')->andReturn(Request::METHOD_GET);
 
         $event = new ViewEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST, 'foo');
 
@@ -238,6 +276,7 @@ class RestApiEventSubscriberTest extends \PHPUnit_Framework_TestCase
 
         $kernel = m::mock(HttpKernel::class);
         $request = m::mock(Request::class);
+        $request->shouldReceive('getMethod')->andReturn(Request::METHOD_GET);
         $response = m::mock(Response::class);
 
         $event = new ResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
@@ -266,6 +305,7 @@ class RestApiEventSubscriberTest extends \PHPUnit_Framework_TestCase
 
         $kernel = m::mock(HttpKernel::class);
         $request = m::mock(Request::class);
+        $request->shouldReceive('getMethod')->andReturn(Request::METHOD_GET);
 
         $event = new ResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
 
@@ -295,6 +335,7 @@ class RestApiEventSubscriberTest extends \PHPUnit_Framework_TestCase
 
         $kernel = m::mock(HttpKernel::class);
         $request = m::mock(Request::class);
+        $request->shouldReceive('getMethod')->andReturn(Request::METHOD_GET);
         $response = m::mock(Response::class);
 
         $event = new ResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
@@ -321,6 +362,7 @@ class RestApiEventSubscriberTest extends \PHPUnit_Framework_TestCase
 
         $kernel = m::mock(HttpKernel::class);
         $request = m::mock(Request::class);
+        $request->shouldReceive('getMethod')->andReturn(Request::METHOD_GET);
         $response = m::mock(Response::class);
 
         $event = new ResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);

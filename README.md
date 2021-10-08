@@ -31,7 +31,7 @@ Documentation and examples can be found in the [/docs](/docs) folder.
 
 ## Requirements
 
-- PHP >= 7.1
+- PHP >= 7.3
 
 To use the library.
 

@@ -7,10 +7,7 @@ use JsonSerializable;
 
 class JsonSerializableException extends Exception implements JsonSerializable
 {
-    /**
-     * @inheritDoc
-     */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return ['code' => 0, 'message' => 'json_serialized_message', 'fields' => []];
     }

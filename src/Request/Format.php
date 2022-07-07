@@ -8,18 +8,12 @@ class Format
     const FORMAT_XML = 'xml';
     const FORMAT_MSGPACK = 'msgpack';
 
-    /**
-     * @return string
-     */
-    public static function getDefault()
+    public static function getDefault(): string
     {
         return self::FORMAT_JSON;
     }
 
-    /**
-     * @return array
-     */
-    public static function getAvailable()
+    public static function getAvailable(): array
     {
         return [self::FORMAT_JSON, self::FORMAT_XML];
     }

@@ -5,7 +5,8 @@ namespace
     if (!function_exists('msgpack_pack')) {
         function msgpack_pack($value)
         {
-            return 'bar';
+            // From https://github.com/rybakit/msgpack.php/blob/master/tests/Unit/MessagePackTest.php:24
+            return "\x91\x01";
         }
     }
 }
@@ -38,8 +39,8 @@ namespace MediaMonks\RestApi\Tests\Serializer
         public function test_serialize()
         {
             $serializer = new MsgpackSerializer();
-            $output = $serializer->serialize('foo', 'msgpack');
-            $this->assertEquals('bar', $output);
+            $output = $serializer->serialize([0 => 1], 'msgpack');
+            $this->assertEquals("\x91\x01", $output);
         }
     }
 }

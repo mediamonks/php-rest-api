@@ -16,10 +16,6 @@ class Response extends BaseResponse
     {
         parent::__construct('', $status, $headers);
 
-        if (null === $data) {
-            $data = new \ArrayObject();
-        }
-
         $this->setContent($data);
     }
 
@@ -32,7 +28,7 @@ class Response extends BaseResponse
      * @return Response
      * @api
      */
-    public function setContent($content)
+    public function setContent(?string $content): static
     {
         $this->content = $content;
 

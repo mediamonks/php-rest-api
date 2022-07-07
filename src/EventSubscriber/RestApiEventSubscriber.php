@@ -2,6 +2,7 @@
 
 namespace MediaMonks\RestApi\EventSubscriber;
 
+use JetBrains\PhpStorm\ArrayShape;
 use MediaMonks\RestApi\Request\RequestMatcherInterface;
 use MediaMonks\RestApi\Request\RequestTransformerInterface;
 use MediaMonks\RestApi\Response\ResponseTransformerInterface;
@@ -16,126 +17,80 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class RestApiEventSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var RequestMatcherInterface
-     */
-    private $requestMatcher;
-
-    /**
-     * @var RequestTransformerInterface
-     */
-    private $requestTransformer;
-
-    /**
-     * @var ResponseTransformerInterface
-     */
-    private $responseTransformer;
-
-    /**
-     * @param RequestMatcherInterface $requestMatcher
-     * @param RequestTransformerInterface $requestTransformer
-     * @param ResponseTransformerInterface $responseTransformer
-     */
     public function __construct(
-        RequestMatcherInterface $requestMatcher,
-        RequestTransformerInterface $requestTransformer,
-        ResponseTransformerInterface $responseTransformer
-    ) {
-        $this->requestMatcher = $requestMatcher;
-        $this->requestTransformer = $requestTransformer;
-        $this->responseTransformer = $responseTransformer;
+        private RequestMatcherInterface      $requestMatcher,
+        private RequestTransformerInterface  $requestTransformer,
+        private ResponseTransformerInterface $responseTransformer
+    )
+    {
+
     }
 
-    /**
-     * @return array
-     */
-    public static function getSubscribedEvents()
+    #[ArrayShape([KernelEvents::REQUEST => "array[]", KernelEvents::EXCEPTION => "array[]", KernelEvents::VIEW => "array[]", KernelEvents::RESPONSE => "array[]"])] public static function getSubscribedEvents(): array
     {
         return [
-            KernelEvents::REQUEST   => [
+            KernelEvents::REQUEST => [
                 ['onRequest', 512],
             ],
             KernelEvents::EXCEPTION => [
                 ['onException', 512],
             ],
-            KernelEvents::VIEW      => [
+            KernelEvents::VIEW => [
                 ['onView', 0],
             ],
-            KernelEvents::RESPONSE  => [
+            KernelEvents::RESPONSE => [
                 ['onResponseEarly', 0],
                 ['onResponseLate', -512],
             ],
         ];
     }
 
-    /**
-     * @param RequestEvent $event
-     */
-    public function onRequest(RequestEvent $event)
+    public function onRequest(RequestEvent $event): void
     {
         if (!$this->eventRequestMatches($event)) {
             return;
         }
+
         $this->requestTransformer->transform($event->getRequest());
     }
 
-    /**
-     * convert exception to rest api response
-     *
-     * @param ExceptionEvent $event
-     */
-    public function onException(ExceptionEvent $event)
+    public function onException(ExceptionEvent $event): void
     {
         if (!$this->eventRequestMatches($event)) {
             return;
         }
+
         $event->setResponse($this->responseTransformer->createResponseFromContent($event->getThrowable()));
     }
 
-    /**
-     * convert response to rest api response
-     *
-     * @param ViewEvent $event
-     */
-    public function onView(ViewEvent $event)
+    public function onView(ViewEvent $event): void
     {
         if (!$this->eventRequestMatches($event)) {
             return;
         }
+
         $event->setResponse($this->responseTransformer->createResponseFromContent($event->getControllerResult()));
     }
 
-    /**
-     * converts content to correct output format
-     *
-     * @param ResponseEvent $event
-     */
-    public function onResponseEarly(ResponseEvent $event)
+    public function onResponseEarly(ResponseEvent $event): void
     {
         if (!$this->eventRequestMatches($event)) {
             return;
         }
+
         $event->setResponse($this->responseTransformer->transformEarly($event->getRequest(), $event->getResponse()));
     }
 
-    /**
-     * wrap the content if needed
-     *
-     * @param ResponseEvent $event
-     */
-    public function onResponseLate(ResponseEvent $event)
+    public function onResponseLate(ResponseEvent $event): void
     {
         if (!$this->eventRequestMatches($event)) {
             return;
         }
+
         $this->responseTransformer->transformLate($event->getRequest(), $event->getResponse());
     }
 
-    /**
-     * @param KernelEvent $event
-     * @return bool
-     */
-    protected function eventRequestMatches(KernelEvent $event)
+    protected function eventRequestMatches(KernelEvent $event): bool
     {
         if ($event->getRequest()->getMethod() === Request::METHOD_OPTIONS) return false;
 

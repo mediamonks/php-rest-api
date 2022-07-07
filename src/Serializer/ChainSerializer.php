@@ -5,7 +5,6 @@ namespace MediaMonks\RestApi\Serializer;
 use JMS\Serializer\Serializer;
 use JMS\Serializer\SerializationContext;
 use MediaMonks\RestApi\Exception\SerializerException;
-use MediaMonks\RestApi\Request\Format;
 
 class ChainSerializer implements SerializerInterface
 {
@@ -14,12 +13,9 @@ class ChainSerializer implements SerializerInterface
     /**
      * @var SerializerInterface[]
      */
-    private $serializers = [];
+    private array $serializers = [];
 
-    /**
-     * @var array
-     */
-    private $formats = [];
+    private array $formats = [];
 
     /**
      * @param SerializerInterface $serializer
@@ -31,12 +27,9 @@ class ChainSerializer implements SerializerInterface
     }
 
     /**
-     * @param $data
-     * @param $format
-     * @return mixed
      * @throws SerializerException
      */
-    public function serialize($data, $format)
+    public function serialize(mixed $data, string $format): string
     {
         $this->assertHasSerializer();
 
@@ -50,9 +43,9 @@ class ChainSerializer implements SerializerInterface
     }
 
     /**
-     * @return array
+     * @throws SerializerException
      */
-    public function getSupportedFormats()
+    public function getSupportedFormats(): array
     {
         $this->assertHasSerializer();
 
@@ -60,9 +53,9 @@ class ChainSerializer implements SerializerInterface
     }
 
     /**
-     * @return string
+     * @throws SerializerException
      */
-    public function getDefaultFormat()
+    public function getDefaultFormat(): string
     {
         $this->assertHasSerializer();
 

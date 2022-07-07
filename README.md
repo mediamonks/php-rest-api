@@ -1,10 +1,9 @@
-[![Build Status](https://travis-ci.org/mediamonks/php-rest-api.svg?branch=master)](https://travis-ci.org/mediamonks/php-rest-api)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mediamonks/php-rest-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mediamonks/php-rest-api/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/mediamonks/php-rest-api/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/mediamonks/php-rest-api/?branch=master)
-[![Total Downloads](https://poser.pugx.org/mediamonks/rest-api/downloads)](https://packagist.org/packages/mediamonks/rest-api)
-[![Latest Stable Version](https://poser.pugx.org/mediamonks/rest-api/v/stable)](https://packagist.org/packages/mediamonks/rest-api)
-[![Latest Unstable Version](https://poser.pugx.org/mediamonks/rest-api/v/unstable)](https://packagist.org/packages/mediamonks/rest-api)
-[![License](https://poser.pugx.org/mediamonks/rest-api/license)](https://packagist.org/packages/mediamonks/rest-api)
+[![Build Status](https://img.shields.io/github/workflow/status/mediamonks/php-rest-api/CI?label=CI&logo=github&style=flat-square)](https://github.com/mediamonks/doctrine-extensions/actions?query=workflow%3ACI)
+[![Code Coverage](https://img.shields.io/codecov/c/gh/mediamonks/php-rest-api?label=codecov&logo=codecov&style=flat-square)](https://codecov.io/gh/mediamonks/doctrine-extensions)
+[![Total Downloads](https://poser.pugx.org/mediamonks/php-rest-api/downloads)](https://packagist.org/packages/mediamonks/php-rest-api)
+[![Latest Stable Version](https://poser.pugx.org/mediamonks/php-rest-api/v/stable)](https://packagist.org/packages/mediamonks/php-rest-api)
+[![Latest Unstable Version](https://poser.pugx.org/mediamonks/php-rest-api/v/unstable)](https://packagist.org/packages/mediamonks/php-rest-api)
+[![License](https://poser.pugx.org/mediamonks/php-rest-api/license)](https://packagist.org/packages/mediamonks/php-rest-api)
 
 # MediaMonks Rest API
 
@@ -13,7 +12,6 @@ By default this library will output according to our [MediaMonks Rest API spec](
 
 ## Highlights
 
-- Scalars, arrays and objects will be converted automatically
 - Thrown exceptions will be converted automatically
 - Supports custom serializers like JMS, uses json serializer by default
 - Supports custom response models
@@ -30,7 +28,7 @@ Documentation and examples can be found in the [/docs](/docs) folder.
 
 ## Requirements
 
-- PHP >= 7.1
+- PHP >= 8.0
 
 To use the library.
 

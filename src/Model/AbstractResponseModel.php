@@ -10,68 +10,38 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 abstract class AbstractResponseModel
 {
-    /**
-     * @var int
-     */
-    protected $statusCode = Response::HTTP_OK;
+    protected int $statusCode = Response::HTTP_OK;
 
-    /**
-     * @var bool
-     */
-    protected $returnStatusCode = false;
+    protected bool $returnStatusCode = false;
 
-    /**
-     * @var bool
-     */
-    protected $returnStackTrace = false;
+    protected bool $returnStackTrace = false;
 
-    /**
-     * @var mixed
-     */
-    protected $data;
+    protected mixed $data = null;
 
-    /**
-     * @var Response
-     */
-    protected $response;
+    protected ?Response $response = null;
 
-    /**
-     * @var \Throwable
-     */
-    protected $throwable;
+    protected ?\Throwable $throwable = null;
 
-    /**
-     * @var PaginatedResponseInterface
-     */
-    protected $pagination;
+    protected ?PaginatedResponseInterface $pagination = null;
 
-    /**
-     * @return boolean
-     */
-    public function isReturnStackTrace()
+    public function isReturnStackTrace(): bool
     {
         return $this->returnStackTrace;
     }
 
-    /**
-     * @param boolean $returnStackTrace
-     * @return $this
-     */
-    public function setReturnStackTrace($returnStackTrace)
+    public function setReturnStackTrace(bool $returnStackTrace): ResponseModelInterface
     {
         $this->returnStackTrace = $returnStackTrace;
 
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getStatusCode()
+    public function getStatusCode(): int
     {
         if (isset($this->throwable)) {
             return $this->getExceptionStatusCode();
         }
+
         if ($this->isEmpty()) {
             return Response::HTTP_NO_CONTENT;
         }
@@ -79,10 +49,7 @@ abstract class AbstractResponseModel
         return $this->statusCode;
     }
 
-    /**
-     * @return int
-     */
-    protected function getExceptionStatusCode()
+    protected function getExceptionStatusCode(): int
     {
         if ($this->throwable instanceof HttpException) {
             return $this->throwable->getStatusCode();
@@ -97,29 +64,17 @@ abstract class AbstractResponseModel
         return Response::HTTP_INTERNAL_SERVER_ERROR;
     }
 
-    /**
-     * @param int $code
-     * @return bool
-     */
-    protected function isValidHttpStatusCode($code)
+    protected function isValidHttpStatusCode(int $code): bool
     {
         return array_key_exists($code, Response::$statusTexts) && $code >= Response::HTTP_BAD_REQUEST;
     }
 
-    /**
-     * @param string $errorCode
-     * @param string $trim
-     * @return string
-     */
-    protected function getThrowableErrorCode($errorCode, $trim = null)
+    protected function getThrowableErrorCode(string $errorCode, ?string $trim = null): string
     {
         return sprintf($errorCode, StringUtil::classToSnakeCase($this->throwable, $trim));
     }
 
-    /**
-     * @return string
-     */
-    protected function getThrowableStackTrace()
+    protected function getThrowableStackTrace(): array
     {
         $traces = [];
         foreach ($this->throwable->getTrace() as $trace) {
@@ -135,88 +90,55 @@ abstract class AbstractResponseModel
         return $traces;
     }
 
-    /**
-     * @param int $statusCode
-     * @return $this
-     */
-    public function setStatusCode($statusCode)
+    public function setStatusCode(int $statusCode): ResponseModelInterface
     {
         $this->statusCode = $statusCode;
 
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function getReturnStatusCode()
+    public function getReturnStatusCode(): bool
     {
         return $this->returnStatusCode;
     }
 
-    /**
-     * @param bool $returnStatusCode
-     * @return $this
-     */
-    public function setReturnStatusCode($returnStatusCode)
+    public function setReturnStatusCode(bool $returnStatusCode): ResponseModelInterface
     {
         $this->returnStatusCode = $returnStatusCode;
 
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getData()
+    public function getData(): mixed
     {
         return $this->data;
     }
 
-    /**
-     * @param mixed $data
-     * @return $this
-     */
-    public function setData($data)
+    public function setData(mixed $data): ResponseModelInterface
     {
         $this->data = $data;
 
         return $this;
     }
 
-    /**
-     * @return \Exception
-     */
-    public function getThrowable()
+    public function getThrowable(): ?\Throwable
     {
         return $this->throwable;
     }
 
-    /**
-     * @param \Throwable $throwable
-     *
-     * @return $this
-     */
-    public function setThrowable(\Throwable $throwable)
+    public function setThrowable(\Throwable $throwable): ResponseModelInterface
     {
         $this->throwable = $throwable;
 
         return $this;
     }
 
-    /**
-     * @return PaginatedResponseInterface
-     */
-    public function getPagination()
+    public function getPagination(): ?PaginatedResponseInterface
     {
         return $this->pagination;
     }
 
-    /**
-     * @param PaginatedResponseInterface $pagination
-     * @return $this
-     */
-    public function setPagination(PaginatedResponseInterface $pagination)
+    public function setPagination(PaginatedResponseInterface $pagination): ResponseModelInterface
     {
         $this->pagination = $pagination;
         $this->setData($pagination->getData());
@@ -224,19 +146,12 @@ abstract class AbstractResponseModel
         return $this;
     }
 
-    /**
-     * @return Response
-     */
-    public function getResponse()
+    public function getResponse(): ?Response
     {
         return $this->response;
     }
 
-    /**
-     * @param Response $response
-     * @return $this
-     */
-    public function setResponse(Response $response)
+    public function setResponse(Response $response): ResponseModelInterface
     {
         $this->response = $response;
         $this->setStatusCode($response->getStatusCode());
@@ -245,10 +160,7 @@ abstract class AbstractResponseModel
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
         return (
             !isset($this->throwable)
@@ -258,10 +170,7 @@ abstract class AbstractResponseModel
         );
     }
 
-    /**
-     * @return bool
-     */
-    protected function isEmptyResponse()
+    protected function isEmptyResponse(): bool
     {
         return !isset($this->response) || $this->response->isEmpty();
     }
@@ -270,10 +179,8 @@ abstract class AbstractResponseModel
 
     /**
      * This is called when an exception is thrown during the response transformation
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return json_encode(get_object_vars($this));
     }

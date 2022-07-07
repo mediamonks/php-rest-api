@@ -4,78 +4,36 @@ namespace MediaMonks\RestApi\Response;
 
 abstract class AbstractPaginatedResponse
 {
-    /**
-     * @var mixed
-     */
-    protected $data;
-
-    /**
-     * @var int
-     */
-    protected $limit;
-
-    /**
-     * @var int
-     */
-    protected $total;
-
-    /**
-     * PaginatedResponseAbstract constructor.
-     * @param $data
-     * @param $limit
-     * @param null $total
-     */
-    public function __construct($data, $limit, $total = null)
+    public function __construct(protected mixed $data, protected int $limit, protected ?int $total = null)
     {
-        $this->data = $data;
-        $this->limit = $limit;
-        $this->total = $total;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getData()
+    public function getData(): mixed
     {
         return $this->data;
     }
 
-    /**
-     * @param mixed $data
-     */
-    public function setData($data)
+    public function setData(mixed $data): void
     {
         $this->data = $data;
     }
 
-    /**
-     * @return int
-     */
-    public function getLimit()
+    public function getLimit(): int
     {
         return $this->limit;
     }
 
-    /**
-     * @param int $limit
-     */
-    public function setLimit($limit)
+    public function setLimit(int $limit): void
     {
         $this->limit = $limit;
     }
 
-    /**
-     * @return int
-     */
-    public function getTotal()
+    public function getTotal(): ?int
     {
         return $this->total;
     }
 
-    /**
-     * @param int $total
-     */
-    public function setTotal($total)
+    public function setTotal(?int $total): void
     {
         $this->total = $total;
     }

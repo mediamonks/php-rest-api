@@ -11,11 +11,7 @@ use MediaMonks\RestApi\Serializer\JsonSerializer;
 
 class RestApiEventSubscriberFactory
 {
-    /**
-     * @param array $options
-     * @return RestApiEventSubscriber
-     */
-    public static function create(array $options = [])
+    public static function create(array $options = []): RestApiEventSubscriber
     {
         $options = self::getOptions($options);
         $requestTransformer = new RequestTransformer($options['serializer']);
@@ -29,33 +25,28 @@ class RestApiEventSubscriberFactory
         return new RestApiEventSubscriber($options['request_matcher'], $requestTransformer, $responseTransformer);
     }
 
-    /**
-     * @param array $options
-     * @return array
-     */
-    protected static function getOptions(array $options = [])
+    protected static function getOptions(array $options = []): array
     {
         if (empty($options['path'])) {
             $options['path'] = '/api';
         }
+
         if (empty($options['serializer'])) {
             $options['serializer'] = new JsonSerializer();
         }
+
         if (empty($options['response_model'])) {
             $options['response_model'] = new ResponseModel();
         }
+
         if (empty($options['request_matcher'])) {
-            $options['request_matcher'] =  new PathRequestMatcher($options['path']);
+            $options['request_matcher'] = new PathRequestMatcher($options['path']);
         }
 
         return $options;
     }
 
-    /**
-     * @param array $options
-     * @return array
-     */
-    protected static function getResponseTransformerOptions(array $options = [])
+    protected static function getResponseTransformerOptions(array $options = []): array
     {
         $responseTransformerOptions = [];
         if (isset($options['debug'])) {

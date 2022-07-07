@@ -21,18 +21,18 @@ class JsonResponse extends BaseJsonResponse
             $data = new \ArrayObject();
         }
 
-        $this->setContent($data);
+        $this->setData($data);
     }
 
     /**
      * We need this because setData() does json encoding already and
      * this messes up the jsonp callback.
-     * It is a performance hit to let is decode/encode a second time
+     * It is a performance hit to let it decode/encode a second time
      *
      * @param mixed $content
      * @return $this
      */
-    public function setContent($content)
+    public function setContent(?string $content): static
     {
         $this->data = $this->content = $content;
 

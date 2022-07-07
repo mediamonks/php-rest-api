@@ -4,11 +4,7 @@ namespace MediaMonks\RestApi\Serializer;
 
 trait SerializerTrait
 {
-    /**
-     * @param $format
-     * @return bool
-     */
-    public function supportsFormat($format)
+    public function supportsFormat(string $format): bool
     {
         return in_array($format, $this->getSupportedFormats());
     }

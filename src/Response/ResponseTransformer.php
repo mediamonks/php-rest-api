@@ -138,10 +138,6 @@ class ResponseTransformer implements ResponseTransformerInterface
         return $response;
     }
 
-    /**
-     * @param Request $request
-     * @param SymfonyResponse $response
-     */
     public function transformLate(Request $request, SymfonyResponse $response)
     {
         if ($request->getRequestFormat() === Format::FORMAT_JSON
@@ -223,7 +219,7 @@ class ResponseTransformer implements ResponseTransformerInterface
             $response = new SymfonyJsonResponse(
                 [
                     'error' => [
-                        'code' => Error::CODE_SERIALIZE,
+                        'code' => Error::CODE_GENERAL,
                         'message' => $e->getMessage(),
                     ],
                 ]

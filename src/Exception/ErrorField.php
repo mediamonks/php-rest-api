@@ -4,66 +4,30 @@ namespace MediaMonks\RestApi\Exception;
 
 class ErrorField
 {
-    /**
-     * @var string
-     */
-    protected $field;
-
-    /**
-     * @var string
-     */
-    protected $code;
-
-    /**
-     * @var string
-     */
-    protected $message;
-
-    /**
-     * ErrorField constructor.
-     * @param string $field
-     * @param string $code
-     * @param string $message
-     */
-    public function __construct($field, $code, $message)
+    public function __construct(private string $field, private string $code, private string $message)
     {
-        $this->field = $field;
-        $this->code = $code;
-        $this->message = $message;
     }
 
-    /**
-     * @return string
-     */
-    public function getField()
+    public function getField(): string
     {
         return $this->field;
     }
 
-    /**
-     * @return string
-     */
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->message;
     }
 
-    /**
-     * @return string
-     */
-    public function getCode()
+    public function getCode(): string
     {
         return $this->code;
     }
 
-    /**
-     * @return array
-     */
-    public function toArray()
+    public function toArray(): array
     {
         return [
-            'field'   => $this->getField(),
-            'code'    => $this->getCode(),
+            'field' => $this->getField(),
+            'code' => $this->getCode(),
             'message' => $this->getMessage(),
         ];
     }

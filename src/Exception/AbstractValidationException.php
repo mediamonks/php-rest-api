@@ -2,30 +2,23 @@
 
 namespace MediaMonks\RestApi\Exception;
 
+
 abstract class AbstractValidationException extends AbstractException implements ExceptionInterface, FieldExceptionInterface
 {
-    /**
-     * AbstractFieldsException constructor.
-     * @param string $message
-     * @param string $code
-     */
-    public function __construct($message, $code)
+    public function __construct(protected $message, protected $code)
     {
-        $this->message = $message;
-        $this->code = $code;
+        parent::__construct($this->message, $this->code);
     }
 
-    /**
-     * @return array
-     */
-    public function toArray()
+    public function toArray(): array
     {
         $return = [
             'code'    => $this->getCode(),
             'message' => $this->getMessage(),
         ];
+
         foreach ($this->getFields() as $field) {
-            $return['fields'][] = $field->toArray();
+            $return['fields'][] = $field;
         }
 
         return $return;

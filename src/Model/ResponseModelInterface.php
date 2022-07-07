@@ -7,50 +7,19 @@ use Symfony\Component\HttpFoundation\Response;
 
 interface ResponseModelInterface
 {
-    /**
-     * @param Response $response
-     * @return ResponseModelInterface
-     */
-    public function setResponse(Response $response);
+    public function setResponse(Response $response): ResponseModelInterface;
 
-    /**
-     * @param PaginatedResponseInterface $paginatedResponse
-     * @return ResponseModelInterface
-     */
-    public function setPagination(PaginatedResponseInterface $paginatedResponse);
+    public function setPagination(PaginatedResponseInterface $paginatedResponse): ResponseModelInterface;
 
-    /**
-     * @param \Throwable $throwable
-     *
-     * @return ResponseModelInterface
-     */
-    public function setThrowable(\Throwable $throwable);
+    public function setThrowable(\Throwable $throwable): ResponseModelInterface;
 
-    /**
-     * @param mixed $data
-     * @return ResponseModelInterface
-     */
-    public function setData($data);
+    public function setData(mixed $data): ResponseModelInterface;
 
-    /**
-     * @param bool $returnStatusCode
-     * @return ResponseModelInterface
-     */
-    public function setReturnStatusCode($returnStatusCode);
+    public function setReturnStatusCode(bool $returnStatusCode): ResponseModelInterface;
 
-    /**
-     * @param bool $returnStackTrace
-     * @return ResponseModelInterface
-     */
-    public function setReturnStackTrace($returnStackTrace);
+    public function setReturnStackTrace(bool $returnStackTrace): ResponseModelInterface;
 
-    /**
-     * @return int
-     */
-    public function getStatusCode();
+    public function getStatusCode(): int;
 
-    /**
-     * @return array
-     */
-    public function toArray();
+    public function toArray(): array;
 }

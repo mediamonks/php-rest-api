@@ -2,6 +2,7 @@
 
 namespace MediaMonks\RestApi\Exception;
 
+use JetBrains\PhpStorm\ArrayShape;
 use MediaMonks\RestApi\Response\Error;
 use MediaMonks\RestApi\Util\StringUtil;
 use Symfony\Component\Form\FormError;
@@ -11,38 +12,20 @@ class FormValidationException extends AbstractValidationException
 {
     const FIELD_ROOT = '#';
 
-    /**
-     * @var FormInterface
-     */
-    protected $form;
-
-    /**
-     * @param FormInterface $form
-     * @param string $message
-     * @param string $code
-     */
     public function __construct(
-        FormInterface $form,
-        $message = Error::MESSAGE_FORM_VALIDATION,
-        $code = Error::CODE_FORM_VALIDATION
+        private FormInterface $form,
+        protected $message = Error::MESSAGE_FORM_VALIDATION,
+        protected $code = Error::CODE_FORM_VALIDATION
     ) {
-        $this->form = $form;
         parent::__construct($message, $code);
     }
 
-    /**
-     * @return array
-     */
-    public function getFields()
+    public function getFields(): array
     {
         return $this->getErrorMessages($this->form);
     }
 
-    /**
-     * @param FormInterface $form
-     * @return array
-     */
-    protected function getErrorMessages(FormInterface $form)
+    protected function getErrorMessages(FormInterface $form): array
     {
         $errors = [];
         foreach ($this->getFormErrorMessages($form) as $error) {
@@ -55,11 +38,7 @@ class FormValidationException extends AbstractValidationException
         return $errors;
     }
 
-    /**
-     * @param FormInterface $form
-     * @return array
-     */
-    protected function getFormErrorMessages(FormInterface $form)
+    protected function getFormErrorMessages(FormInterface $form): array
     {
         $errors = [];
         foreach ($form->getErrors() as $error) {
@@ -73,11 +52,7 @@ class FormValidationException extends AbstractValidationException
         return $errors;
     }
 
-    /**
-     * @param FormInterface $form
-     * @return array
-     */
-    protected function getFormChildErrorMessages(FormInterface $form)
+    protected function getFormChildErrorMessages(FormInterface $form): array
     {
         $errors = [];
         foreach ($form->all() as $child) {
@@ -91,21 +66,12 @@ class FormValidationException extends AbstractValidationException
         return $errors;
     }
 
-    /**
-     * @param FormInterface|null $child
-     * @return bool
-     */
-    protected function shouldAddChildErrorMessage(FormInterface $child = null)
+    protected function shouldAddChildErrorMessage(FormInterface $child = null): bool
     {
         return !empty($child) && !$child->isValid();
     }
 
-    /**
-     * @param FormError $error
-     * @param FormInterface|null $form
-     * @return ErrorField
-     */
-    protected function toErrorArray(FormError $error, FormInterface $form = null)
+    protected function toErrorArray(FormError $error, FormInterface $form = null): array
     {
         if (is_null($form)) {
             $field = self::FIELD_ROOT;
@@ -118,14 +84,10 @@ class FormValidationException extends AbstractValidationException
             $code = $this->getErrorCodeByMessage($error);
         }
 
-        return new ErrorField($field, $code, $error->getMessage());
+        return (new ErrorField($field, $code, $error->getMessage()))->toArray();
     }
 
-    /**
-     * @param FormError $error
-     * @return string
-     */
-    protected function getErrorCodeByMessage(FormError $error)
+    protected function getErrorCodeByMessage(FormError $error): string
     {
         if (stristr($error->getMessage(), Error::FORM_TYPE_CSRF)) {
             return $this->getErrorCode(Error::FORM_TYPE_CSRF);
@@ -134,12 +96,8 @@ class FormValidationException extends AbstractValidationException
         return $this->getErrorCode(Error::FORM_TYPE_GENERAL);
     }
 
-    /**
-     * @param string $value
-     * @return string
-     */
-    protected function getErrorCode($value)
+    protected function getErrorCode(string $value): string
     {
-        return sprintf(Error::CODE_FORM_VALIDATION.'.%s', $value);
+        return sprintf(Error::FORM_VALIDATION_KEY.'.%s', $value);
     }
 }

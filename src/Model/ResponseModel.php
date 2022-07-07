@@ -2,34 +2,29 @@
 
 namespace MediaMonks\RestApi\Model;
 
+use JsonSerializable;
 use MediaMonks\RestApi\Exception\ExceptionInterface;
 use MediaMonks\RestApi\Response\Error;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use JsonSerializable;
 
-class ResponseModel extends AbstractResponseModel
-    implements ResponseModelInterface
+class ResponseModel extends AbstractResponseModel implements ResponseModelInterface
 {
 
     const EXCEPTION_GENERAL = 'Exception';
 
     const EXCEPTION_HTTP = 'HttpException';
 
-    /**
-     * @return array
-     */
-    public function toArray()
+    public function toArray(): array
     {
         $return = [];
         if ($this->getReturnStatusCode()) {
             $return['statusCode'] = $this->getStatusCode();
         }
+
         if (isset($this->throwable)) {
             $return['error'] = $this->throwableToArray();
-        } elseif (isset($this->response)
-            && $this->response instanceof RedirectResponse
-        ) {
+        } elseif (isset($this->response) && $this->response instanceof RedirectResponse) {
             $return['location'] = $this->response->headers->get('Location');
         } else {
             $return += $this->dataToArray();
@@ -38,10 +33,7 @@ class ResponseModel extends AbstractResponseModel
         return $return;
     }
 
-    /**
-     * @return array
-     */
-    protected function dataToArray()
+    protected function dataToArray(): array
     {
         $return = [];
         if (isset($this->data)) {
@@ -54,10 +46,7 @@ class ResponseModel extends AbstractResponseModel
         return $return;
     }
 
-    /**
-     * @return array
-     */
-    protected function throwableToArray()
+    protected function throwableToArray(): array
     {
         if ($this->throwable instanceof ExceptionInterface) {
             $error = $this->throwable->toArray();
@@ -68,6 +57,7 @@ class ResponseModel extends AbstractResponseModel
         } else {
             $error = $this->generalThrowableToArray();
         }
+
         if ($this->isReturnStackTrace()) {
             $error['stack_trace'] = $this->getThrowableStackTrace();
         }
@@ -75,29 +65,23 @@ class ResponseModel extends AbstractResponseModel
         return $error;
     }
 
-    /**
-     * @return array
-     */
-    protected function httpExceptionToArray()
+    protected function httpExceptionToArray(): array
     {
         return [
             'code' => $this->getThrowableErrorCode(
-                Error::CODE_HTTP,
+                Error::GENERAL_ERROR_KEY,
                 self::EXCEPTION_HTTP
             ),
             'message' => $this->throwable->getMessage(),
         ];
     }
 
-    /**
-     * @return array
-     */
-    protected function generalThrowableToArray()
+    protected function generalThrowableToArray(): array
     {
         return [
             'code' => trim(
                 $this->getThrowableErrorCode(
-                    Error::CODE_GENERAL,
+                    Error::GENERAL_ERROR_KEY,
                     self::EXCEPTION_GENERAL
                 ),
                 '.'

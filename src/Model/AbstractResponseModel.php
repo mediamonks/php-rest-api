@@ -21,7 +21,7 @@ abstract class AbstractResponseModel
 
     protected ?Response $response = null;
 
-    protected ExtendedResponseInterface $extendedResponse;
+    protected ?ExtendedResponseInterface $extendedResponse = null;
 
     protected ?\Throwable $throwable = null;
 
@@ -191,12 +191,18 @@ abstract class AbstractResponseModel
             && is_null($this->data)
             && !isset($this->pagination)
             && $this->isEmptyResponse()
+            && $this->isEmptyExtendedResponse()
         );
     }
 
     protected function isEmptyResponse(): bool
     {
-        return !isset($this->response) || $this->response->isEmpty();
+        return (!isset($this->response) || $this->response->isEmpty());
+    }
+
+    protected function isEmptyExtendedResponse(): bool
+    {
+        return (!isset($this->extendedResponse) || $this->extendedResponse->isEmpty());
     }
 
     // @codeCoverageIgnoreStart

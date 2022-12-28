@@ -5,7 +5,10 @@ namespace MediaMonks\RestApi\Response;
 use Symfony\Component\HttpFoundation\JsonResponse as BaseJsonResponse;
 
 class JsonResponse extends BaseJsonResponse
+    implements ExtendedResponseInterface
 {
+    protected mixed $customContent;
+
     /**
      * Constructor.
      *
@@ -13,7 +16,7 @@ class JsonResponse extends BaseJsonResponse
      * @param int $status The response status code
      * @param array $headers An array of response headers
      */
-    public function __construct($data = null, $status = 200, $headers = [])
+    public function __construct($data = null, int $status = 200, array $headers = [])
     {
         parent::__construct('', $status, $headers);
 
@@ -21,7 +24,7 @@ class JsonResponse extends BaseJsonResponse
             $data = new \ArrayObject();
         }
 
-        $this->setData($data);
+        $this->setCustomContent($data);
     }
 
     /**
@@ -32,11 +35,32 @@ class JsonResponse extends BaseJsonResponse
      * @param mixed $content
      * @return $this
      */
-    public function setContent(?string $content): static
+    public function setCustomContent(mixed $content): static
     {
-        $this->data = $this->content = $content;
+        $this->customContent = $content;
 
         return $this;
+    }
+
+    public function getCustomContent(): mixed
+    {
+        return $this->customContent;
+    }
+
+    public function setContent(?string $content): static
+    {
+        return parent::setContent($content);
+    }
+
+    public function getContent(): string|false
+    {
+        return json_encode($this->customContent);
+    }
+
+    public function setData(mixed $data = []): static
+    {
+        $this->setCustomContent($data);
+        return parent::setData($data);
     }
 
     /**

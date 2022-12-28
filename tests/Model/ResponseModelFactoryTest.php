@@ -145,7 +145,7 @@ class ResponseModelFactoryTest extends TestCase
         $this->assertEquals(Response::HTTP_OK, $responseContainer->getStatusCode());
         $this->assertEquals($data, $responseContainer->getData());
         $this->assertNull($responseContainer->getThrowable());
-        $this->assertEquals($response, $responseContainer->getResponse());
+        $this->assertEquals($response, $responseContainer->getExtendedResponse());
         $this->assertNull($responseContainer->getPagination());
         $this->assertFalse($responseContainer->isEmpty());
     }

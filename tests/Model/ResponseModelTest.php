@@ -4,6 +4,7 @@ namespace MediaMonks\RestApi\Tests\Model;
 
 use MediaMonks\RestApi\Model\ResponseModel;
 use MediaMonks\RestApi\Response\OffsetPaginatedResponse;
+use MediaMonks\RestApi\Response\Response as ExtendedResponse;
 use MediaMonks\RestApi\Tests\Exception\JsonSerializableException;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
@@ -35,6 +36,14 @@ class ResponseModelTest extends TestCase
         $responseContainer = new ResponseModel();
         $responseContainer->setResponse($redirect);
         $this->assertEquals($redirect, $responseContainer->getResponse());
+    }
+
+    public function testExtendedResponsGetterSetter()
+    {
+        $response = new ExtendedResponse('OK');
+        $responseContainer = new ResponseModel();
+        $responseContainer->setExtendedResponse($response);
+        $this->assertEquals($response, $responseContainer->getExtendedResponse());
     }
 
     public function testPaginationGettersSetter()
@@ -137,15 +146,5 @@ class ResponseModelTest extends TestCase
         $data = $responseContainer->toArray();
         $this->assertArrayHasKey('error', $data);
         $this->assertArrayNotHasKey('stack_trace', $data['error']);
-    }
-
-    /**
-     * @param $content
-     *
-     * @return ResponseModel
-     */
-    protected function createResponseModel($content)
-    {
-        return ResponseModel::createAutoDetect($content);
     }
 }

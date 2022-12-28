@@ -3,10 +3,13 @@
 namespace MediaMonks\RestApi\Model;
 
 use MediaMonks\RestApi\Response\PaginatedResponseInterface;
+use MediaMonks\RestApi\Response\Response as ExtendedResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 interface ResponseModelInterface
 {
+    public function setExtendedResponse(ExtendedResponse $response): ResponseModelInterface;
+
     public function setResponse(Response $response): ResponseModelInterface;
 
     public function setPagination(PaginatedResponseInterface $paginatedResponse): ResponseModelInterface;

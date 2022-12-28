@@ -11,7 +11,7 @@ class JsonResponseTest extends TestCase
     {
         $data     = ['foo', 'bar'];
         $response = new JsonResponse($data);
-        $this->assertEquals(json_encode($data), $response->getContent());
+        $this->assertEquals($data, $response->getCustomContent());
     }
 
     public function testJsonResponseSetter()
@@ -19,6 +19,6 @@ class JsonResponseTest extends TestCase
         $data     = ['foo', 'bar'];
         $response = new JsonResponse();
         $response->setData($data);
-        $this->assertEquals(json_encode($data), $response->getContent());
+        $this->assertEquals($data, $response->getCustomContent());
     }
 }

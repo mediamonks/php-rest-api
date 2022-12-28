@@ -2,6 +2,7 @@
 
 namespace MediaMonks\RestApi\Model;
 
+use MediaMonks\RestApi\Response\ExtendedResponseInterface;
 use MediaMonks\RestApi\Response\PaginatedResponseInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -14,6 +15,9 @@ class ResponseModelFactory
 
     public function createFromContent(mixed $content): ResponseModelInterface
     {
+        if ($content instanceof ExtendedResponseInterface) {
+            return $this->createFromExtendedResponse($content);
+        }
         if ($content instanceof Response) {
             return $this->createFromResponse($content);
         }
@@ -25,6 +29,11 @@ class ResponseModelFactory
         }
 
         return $this->create()->setData($content);
+    }
+
+    public function createFromExtendedResponse(ExtendedResponseInterface $response): ResponseModelInterface
+    {
+        return $this->create()->setExtendedResponse($response);
     }
 
     public function createFromResponse(Response $response): ResponseModelInterface

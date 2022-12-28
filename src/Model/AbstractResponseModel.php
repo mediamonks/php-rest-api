@@ -3,6 +3,7 @@
 namespace MediaMonks\RestApi\Model;
 
 use MediaMonks\RestApi\Exception\AbstractValidationException;
+use MediaMonks\RestApi\Response\ExtendedResponseInterface;
 use MediaMonks\RestApi\Response\PaginatedResponseInterface;
 use MediaMonks\RestApi\Util\StringUtil;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,6 +20,8 @@ abstract class AbstractResponseModel
     protected mixed $data = null;
 
     protected ?Response $response = null;
+
+    protected ExtendedResponseInterface $extendedResponse;
 
     protected ?\Throwable $throwable = null;
 
@@ -156,6 +159,27 @@ abstract class AbstractResponseModel
         $this->response = $response;
         $this->setStatusCode($response->getStatusCode());
         $this->setData($response->getContent());
+
+        return $this;
+    }
+
+    /**
+     * @return ExtendedResponseInterface
+     */
+    public function getExtendedResponse()
+    {
+        return $this->extendedResponse;
+    }
+
+    /**
+     * @param ExtendedResponseInterface $response
+     * @return $this
+     */
+    public function setExtendedResponse(ExtendedResponseInterface $response): ResponseModelInterface
+    {
+        $this->extendedResponse = $response;
+        $this->setStatusCode($response->getStatusCode());
+        $this->setData($response->getCustomContent());
 
         return $this;
     }

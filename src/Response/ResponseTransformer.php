@@ -118,7 +118,11 @@ class ResponseTransformer implements ResponseTransformerInterface
      */
     public function transformEarly(Request $request, SymfonyResponse $response)
     {
-        $responseModel = $response->getContent();
+        if ($response instanceof ExtendedResponseInterface) {
+            $responseModel = $response->getCustomContent();
+        } else {
+            $responseModel = $response->getContent();
+        }
 
         if (!$responseModel instanceof ResponseModelInterface) {
             $responseModel = $this->responseModelFactory->createFromContent(

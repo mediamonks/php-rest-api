@@ -47,14 +47,9 @@ class JsonResponse extends BaseJsonResponse
         return $this->customContent;
     }
 
-    public function setContent(?string $content): static
-    {
-        return parent::setContent($content);
-    }
-
     public function getContent(): string|false
     {
-        return json_encode($this->customContent);
+        return $this->customContent;
     }
 
     public function setData(mixed $data = []): static

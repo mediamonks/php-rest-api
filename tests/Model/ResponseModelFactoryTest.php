@@ -49,7 +49,7 @@ class ResponseModelFactoryTest extends TestCase
         $responseContainerArray = $responseContainer->toArray();
 
         $this->assertArrayHasKey('error', $responseContainerArray);
-        $this->assertEquals($responseContainerArray['error']['code'], 'error.not_found');
+        $this->assertEquals($responseContainerArray['error']['code'], 'error.http.not_found');
         $this->assertEquals($responseContainerArray['error']['message'], 'foo');
     }
 

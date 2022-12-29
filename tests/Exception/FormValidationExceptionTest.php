@@ -75,15 +75,15 @@ class FormValidationExceptionTest extends TestCase
         $this->assertEquals('General Error', $arrayException['fields'][0]['message']);
 
         $this->assertEquals('#', $arrayException['fields'][1]['field']);
-        $this->assertEquals('validation.csrf', $arrayException['fields'][1]['code']);
+        $this->assertEquals(Error::ERROR_KEY_FORM_VALIDATION . '.csrf', $arrayException['fields'][1]['code']);
         $this->assertEquals('CSRF Error', $arrayException['fields'][1]['message']);
 
         $this->assertEquals('name', $arrayException['fields'][2]['field']);
-        $this->assertEquals('validation.not_blank', $arrayException['fields'][2]['code']);
+        $this->assertEquals(Error::ERROR_KEY_FORM_VALIDATION . '.not_blank', $arrayException['fields'][2]['code']);
         $this->assertEquals('Constraint Failed Error', $arrayException['fields'][2]['message']);
 
         $this->assertEquals('name', $arrayException['fields'][3]['field']);
-        $this->assertEquals('validation.general', $arrayException['fields'][3]['code']);
+        $this->assertEquals(Error::ERROR_KEY_FORM_VALIDATION . '.general', $arrayException['fields'][3]['code']);
         $this->assertEquals('Other Error', $arrayException['fields'][3]['message']);
     }
 }

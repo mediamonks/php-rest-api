@@ -201,6 +201,9 @@ class ResponseTransformer implements ResponseTransformerInterface
     ) {
         if ($response->getStatusCode() === Response::HTTP_NO_CONTENT) {
             $response->setContent(null);
+            if ($response instanceof ExtendedResponseInterface) {
+                $response->setCustomContent(null);
+            }
             $response->headers->remove('Content-Type');
         }
     }

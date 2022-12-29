@@ -10,7 +10,10 @@ class Error
     const FORM_TYPE_GENERAL = 'general';
     const FORM_TYPE_CSRF = 'csrf';
 
-    const FORM_VALIDATION_KEY = 'validation';
-    const GENERAL_ERROR_KEY = 'error.%s';
+    const ERROR_KEY_GENERAL = 'error.%s';
+    const ERROR_KEY_HTTP = 'error.http.%s';
+    const ERROR_KEY_FORM_VALIDATION = 'error.form.validation';
+    const ERROR_KEY_SERIALIZE = 'error.serialize';
+    const ERROR_KEY_REST_API_BUNDLE = 'error.rest_api_bundle';
     const MESSAGE_FORM_VALIDATION = 'Not all fields are filled in correctly.';
 }

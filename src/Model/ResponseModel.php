@@ -69,7 +69,7 @@ class ResponseModel extends AbstractResponseModel implements ResponseModelInterf
     {
         return [
             'code' => $this->getThrowableErrorCode(
-                Error::GENERAL_ERROR_KEY,
+                Error::ERROR_KEY_HTTP,
                 self::EXCEPTION_HTTP
             ),
             'message' => $this->throwable->getMessage(),
@@ -81,7 +81,7 @@ class ResponseModel extends AbstractResponseModel implements ResponseModelInterf
         return [
             'code' => trim(
                 $this->getThrowableErrorCode(
-                    Error::GENERAL_ERROR_KEY,
+                    Error::ERROR_KEY_GENERAL,
                     self::EXCEPTION_GENERAL
                 ),
                 '.'

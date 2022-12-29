@@ -71,7 +71,7 @@ class FormValidationExceptionTest extends TestCase
         $arrayException = $exception->toArray();
 
         $this->assertEquals('#', $arrayException['fields'][0]['field']);
-        $this->assertEquals(Error::FORM_VALIDATION_KEY . '.general', $arrayException['fields'][0]['code']);
+        $this->assertEquals(Error::ERROR_KEY_FORM_VALIDATION . '.general', $arrayException['fields'][0]['code']);
         $this->assertEquals('General Error', $arrayException['fields'][0]['message']);
 
         $this->assertEquals('#', $arrayException['fields'][1]['field']);

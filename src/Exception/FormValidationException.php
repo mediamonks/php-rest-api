@@ -98,6 +98,6 @@ class FormValidationException extends AbstractValidationException
 
     protected function getErrorCode(string $value): string
     {
-        return sprintf(Error::FORM_VALIDATION_KEY.'.%s', $value);
+        return sprintf(Error::ERROR_KEY_FORM_VALIDATION.'.%s', $value);
     }
 }

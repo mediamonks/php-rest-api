@@ -17,8 +17,9 @@ abstract class AbstractValidationException extends AbstractException implements 
             'message' => $this->getMessage(),
         ];
 
+        /** @var ExceptionInterface $field */
         foreach ($this->getFields() as $field) {
-            $return['fields'][] = $field;
+            $return['fields'][] = $field->toArray();
         }
 
         return $return;

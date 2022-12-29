@@ -2,9 +2,13 @@
 
 namespace MediaMonks\RestApi\Exception;
 
-class ErrorField
+class ErrorField implements ExceptionInterface
 {
-    public function __construct(private string $field, private string $code, private string $message)
+    public function __construct(
+        private string $field,
+        private string $code,
+        private string $message
+    )
     {
     }
 

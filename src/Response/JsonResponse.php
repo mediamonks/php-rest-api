@@ -49,7 +49,7 @@ class JsonResponse extends BaseJsonResponse
 
     public function getContent(): string|false
     {
-        return $this->customContent;
+        return is_string($this->customContent) ? $this->customContent : json_encode($this->customContent);
     }
 
     public function setData(mixed $data = []): static

@@ -6,28 +6,17 @@ use MediaMonks\RestApi\Response\Error;
 
 class ValidationException extends AbstractValidationException
 {
-    /**
-     * @var array
-     */
-    protected $fields;
+    protected array $fields;
 
-    /**
-     * @param array $fields
-     * @param string $message
-     * @param string $code
-     */
     public function __construct(
         array $fields,
-        $message = Error::MESSAGE_FORM_VALIDATION,
-        $code = Error::CODE_FORM_VALIDATION
+        protected $message = Error::MESSAGE_FORM_VALIDATION,
+        protected $code = Error::CODE_FORM_VALIDATION
     ) {
         $this->setFields($fields);
         parent::__construct($message, $code);
     }
 
-    /**
-     * @param array $fields
-     */
     public function setFields(array $fields)
     {
         foreach ($fields as $field) {
@@ -38,10 +27,7 @@ class ValidationException extends AbstractValidationException
         }
     }
 
-    /**
-     * @return array
-     */
-    public function getFields()
+    public function getFields(): array
     {
         return $this->fields;
     }

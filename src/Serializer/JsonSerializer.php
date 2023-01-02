@@ -8,28 +8,17 @@ class JsonSerializer implements SerializerInterface
 {
     use SerializerTrait;
 
-    /**
-     * @param $data
-     * @param $format
-     * @return mixed|string
-     */
-    public function serialize($data, $format)
+    public function serialize(mixed $data, string $format): ?string
     {
         return json_encode($data);
     }
 
-    /**
-     * @return array
-     */
-    public function getSupportedFormats()
+    public function getSupportedFormats(): array
     {
         return [Format::FORMAT_JSON];
     }
 
-    /**
-     * @return string
-     */
-    public function getDefaultFormat()
+    public function getDefaultFormat(): string
     {
         return Format::FORMAT_JSON;
     }

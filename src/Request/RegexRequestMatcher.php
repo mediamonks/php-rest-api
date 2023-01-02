@@ -7,34 +7,14 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class RegexRequestMatcher extends AbstractRequestMatcher
 {
-    /**
-     * @var array
-     */
-    protected $whitelist = [];
-
-    /**
-     * @var array
-     */
-    protected $blacklist = [];
-
-    /**
-     * @param array $whitelist
-     * @param array $blacklist
-     */
-    public function __construct(array $whitelist = [], array $blacklist = [])
+    public function __construct(protected array $whitelist = [], protected array $blacklist = [])
     {
-        $this->whitelist = $whitelist;
-        $this->blacklist = $blacklist;
+
     }
 
-    /**
-     * @param Request $request
-     * @param int $requestType
-     * @return bool
-     */
-    public function matches(Request $request, $requestType = HttpKernelInterface::MASTER_REQUEST)
+    public function matches(Request $request, ?int $requestType = HttpKernelInterface::MAIN_REQUEST): bool
     {
-        if ($requestType !== HttpKernelInterface::MASTER_REQUEST) {
+        if ($requestType !== HttpKernelInterface::MAIN_REQUEST) {
             return false;
         }
 
@@ -51,32 +31,22 @@ class RegexRequestMatcher extends AbstractRequestMatcher
         return true;
     }
 
-    /**
-     * @param Request $request
-     */
     protected function markRequestAsMatched(Request $request)
     {
         $request->attributes->set(self::ATTRIBUTE_MATCHED, true);
     }
 
-    /**
-     * @param Request $request
-     * @return bool
-     */
-    protected function matchPreviouslyMatchedRequest(Request $request)
+    protected function matchPreviouslyMatchedRequest(Request $request): bool
     {
         return $request->attributes->getBoolean(self::ATTRIBUTE_MATCHED);
     }
 
-    /**
-     * @param $requestPath
-     * @return bool
-     */
-    protected function matchRequestPathAgainstLists($requestPath)
+    protected function matchRequestPathAgainstLists($requestPath): bool
     {
         if ($this->matchRequestPathAgainstBlacklist($requestPath)) {
             return false;
         }
+
         if ($this->matchRequestPathAgainstWhitelist($requestPath)) {
             return true;
         }
@@ -84,29 +54,25 @@ class RegexRequestMatcher extends AbstractRequestMatcher
         return false;
     }
 
-    /**
-     * @param $requestPath
-     * @return bool
-     */
-    protected function matchRequestPathAgainstBlacklist($requestPath)
+    protected function matchRequestPathAgainstBlacklist(string $requestPath): bool
     {
         foreach ($this->blacklist as $regex) {
             if (preg_match($regex, $requestPath)) {
                 return true;
             }
         }
+
+        return false;
     }
 
-    /**
-     * @param $requestPath
-     * @return bool
-     */
-    protected function matchRequestPathAgainstWhitelist($requestPath)
+    protected function matchRequestPathAgainstWhitelist(string $requestPath): bool
     {
         foreach ($this->whitelist as $regex) {
             if (preg_match($regex, $requestPath)) {
                 return true;
             }
         }
+
+        return false;
     }
 }

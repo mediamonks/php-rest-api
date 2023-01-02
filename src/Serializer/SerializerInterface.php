@@ -4,11 +4,11 @@ namespace MediaMonks\RestApi\Serializer;
 
 interface SerializerInterface
 {
-    public function serialize($data, $format);
+    public function serialize(mixed $data, string $format): ?string;
 
-    public function getSupportedFormats();
+    public function getSupportedFormats(): array;
 
-    public function supportsFormat($format);
+    public function supportsFormat(string $format): bool;
 
-    public function getDefaultFormat();
+    public function getDefaultFormat(): string;
 }

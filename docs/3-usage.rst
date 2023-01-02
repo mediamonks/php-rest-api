@@ -1,44 +1,6 @@
 Step 3: Usage
 =============
 
-Basic Usage
------------
-
-Using this bundle is very easy, you can simply return scalars, arrays or objects from your controller and the bundle
-will serialize and output the content according to the specification.
-
-.. code-block:: php
-
-    <?php
-
-    class ExampleController
-    {
-        public function integerAction()
-        {
-            return 42;
-        }
-
-        public function stringAction()
-        {
-            return 'foobar';
-        }
-
-        public function arrayAction()
-        {
-            return ['foo', 'bar'];
-        }
-
-        public function objectAction()
-        {
-            return new \AppBundle\Entity\Example(); // can be used when using JMS Serializer
-        }
-    }
-
-.. note::
-
-    When returning an object you will have to make sure it's properly configured for use with JMS Serializer because
-    otherwise the object will be returned totally empty.
-
 Custom Status Code And Headers
 ------------------------------
 

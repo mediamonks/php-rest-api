@@ -8,28 +8,17 @@ class MsgpackSerializer implements SerializerInterface
 {
     use SerializerTrait;
 
-    /**
-     * @param $data
-     * @param $format
-     * @return mixed|string
-     */
-    public function serialize($data, $format)
+    public function serialize($data, $format): string
     {
         return msgpack_pack($data);
     }
 
-    /**
-     * @return array
-     */
-    public function getSupportedFormats()
+    public function getSupportedFormats(): array
     {
         return [Format::FORMAT_MSGPACK];
     }
 
-    /**
-     * @return string
-     */
-    public function getDefaultFormat()
+    public function getDefaultFormat(): string
     {
         return Format::FORMAT_MSGPACK;
     }

@@ -4,8 +4,11 @@ namespace MediaMonks\RestApi\Response;
 
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
 
-class Response extends BaseResponse
+class Response extends BaseResponse implements
+    ExtendedResponseInterface
 {
+    protected mixed $customContent;
+
     /**
      * @param mixed $data    The response data
      * @param int   $status  The response status code
@@ -20,7 +23,7 @@ class Response extends BaseResponse
             $data = new \ArrayObject();
         }
 
-        $this->setContent($data);
+        $this->setCustomContent($data);
     }
 
     /**
@@ -32,10 +35,26 @@ class Response extends BaseResponse
      * @return Response
      * @api
      */
-    public function setContent($content)
+    public function setCustomContent(mixed $content): static
     {
-        $this->content = $content;
+        $this->customContent = $content;
 
         return $this;
+    }
+
+    public function getCustomContent(): mixed
+    {
+        return $this->customContent;
+    }
+
+    public function setContent(?string $content): static
+    {
+        $this->customContent = $content;
+        return parent::setContent($content);
+    }
+
+    public function getContent(): string|false
+    {
+        return serialize($this->customContent);
     }
 }

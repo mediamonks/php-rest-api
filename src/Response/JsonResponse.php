@@ -5,7 +5,10 @@ namespace MediaMonks\RestApi\Response;
 use Symfony\Component\HttpFoundation\JsonResponse as BaseJsonResponse;
 
 class JsonResponse extends BaseJsonResponse
+    implements ExtendedResponseInterface
 {
+    protected mixed $customContent;
+
     /**
      * Constructor.
      *
@@ -13,7 +16,7 @@ class JsonResponse extends BaseJsonResponse
      * @param int $status The response status code
      * @param array $headers An array of response headers
      */
-    public function __construct($data = null, $status = 200, $headers = [])
+    public function __construct($data = null, int $status = 200, array $headers = [])
     {
         parent::__construct('', $status, $headers);
 
@@ -21,22 +24,38 @@ class JsonResponse extends BaseJsonResponse
             $data = new \ArrayObject();
         }
 
-        $this->setContent($data);
+        $this->setCustomContent($data);
     }
 
     /**
      * We need this because setData() does json encoding already and
      * this messes up the jsonp callback.
-     * It is a performance hit to let is decode/encode a second time
+     * It is a performance hit to let it decode/encode a second time
      *
      * @param mixed $content
      * @return $this
      */
-    public function setContent($content)
+    public function setCustomContent(mixed $content): static
     {
-        $this->data = $this->content = $content;
+        $this->customContent = $content;
 
         return $this;
+    }
+
+    public function getCustomContent(): mixed
+    {
+        return $this->customContent;
+    }
+
+    public function getContent(): string|false
+    {
+        return is_string($this->customContent) ? $this->customContent : json_encode($this->customContent);
+    }
+
+    public function setData(mixed $data = []): static
+    {
+        $this->setCustomContent($data);
+        return parent::setData($data);
     }
 
     /**

@@ -3,54 +3,26 @@
 namespace MediaMonks\RestApi\Model;
 
 use MediaMonks\RestApi\Response\PaginatedResponseInterface;
+use MediaMonks\RestApi\Response\Response as ExtendedResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 interface ResponseModelInterface
 {
-    /**
-     * @param Response $response
-     * @return ResponseModelInterface
-     */
-    public function setResponse(Response $response);
+    public function setExtendedResponse(ExtendedResponse $response): ResponseModelInterface;
 
-    /**
-     * @param PaginatedResponseInterface $paginatedResponse
-     * @return ResponseModelInterface
-     */
-    public function setPagination(PaginatedResponseInterface $paginatedResponse);
+    public function setResponse(Response $response): ResponseModelInterface;
 
-    /**
-     * @param \Throwable $throwable
-     *
-     * @return ResponseModelInterface
-     */
-    public function setThrowable(\Throwable $throwable);
+    public function setPagination(PaginatedResponseInterface $paginatedResponse): ResponseModelInterface;
 
-    /**
-     * @param mixed $data
-     * @return ResponseModelInterface
-     */
-    public function setData($data);
+    public function setThrowable(\Throwable $throwable): ResponseModelInterface;
 
-    /**
-     * @param bool $returnStatusCode
-     * @return ResponseModelInterface
-     */
-    public function setReturnStatusCode($returnStatusCode);
+    public function setData(mixed $data): ResponseModelInterface;
 
-    /**
-     * @param bool $returnStackTrace
-     * @return ResponseModelInterface
-     */
-    public function setReturnStackTrace($returnStackTrace);
+    public function setReturnStatusCode(bool $returnStatusCode): ResponseModelInterface;
 
-    /**
-     * @return int
-     */
-    public function getStatusCode();
+    public function setReturnStackTrace(bool $returnStackTrace): ResponseModelInterface;
 
-    /**
-     * @return array
-     */
-    public function toArray();
+    public function getStatusCode(): int;
+
+    public function toArray(): array;
 }

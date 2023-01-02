@@ -118,7 +118,11 @@ class ResponseTransformer implements ResponseTransformerInterface
      */
     public function transformEarly(Request $request, SymfonyResponse $response)
     {
-        $responseModel = $response->getContent();
+        if ($response instanceof ExtendedResponseInterface) {
+            $responseModel = $response->getCustomContent();
+        } else {
+            $responseModel = $response->getContent();
+        }
 
         if (!$responseModel instanceof ResponseModelInterface) {
             $responseModel = $this->responseModelFactory->createFromContent(
@@ -138,10 +142,6 @@ class ResponseTransformer implements ResponseTransformerInterface
         return $response;
     }
 
-    /**
-     * @param Request $request
-     * @param SymfonyResponse $response
-     */
     public function transformLate(Request $request, SymfonyResponse $response)
     {
         if ($request->getRequestFormat() === Format::FORMAT_JSON
@@ -201,6 +201,9 @@ class ResponseTransformer implements ResponseTransformerInterface
     ) {
         if ($response->getStatusCode() === Response::HTTP_NO_CONTENT) {
             $response->setContent(null);
+            if ($response instanceof ExtendedResponseInterface) {
+                $response->setCustomContent(null);
+            }
             $response->headers->remove('Content-Type');
         }
     }
@@ -223,7 +226,7 @@ class ResponseTransformer implements ResponseTransformerInterface
             $response = new SymfonyJsonResponse(
                 [
                     'error' => [
-                        'code' => Error::CODE_SERIALIZE,
+                        'code' => Error::CODE_GENERAL,
                         'message' => $e->getMessage(),
                     ],
                 ]

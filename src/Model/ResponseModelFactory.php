@@ -2,30 +2,22 @@
 
 namespace MediaMonks\RestApi\Model;
 
+use MediaMonks\RestApi\Response\ExtendedResponseInterface;
 use MediaMonks\RestApi\Response\PaginatedResponseInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class ResponseModelFactory
 {
-    /**
-     * @var ResponseModelInterface
-     */
-    private $responseModel;
-
-    /**
-     * @param ResponseModelInterface $responseModel
-     */
-    public function __construct(ResponseModelInterface $responseModel)
+    public function __construct(private ResponseModelInterface $responseModel)
     {
-        $this->responseModel = $responseModel;
+
     }
 
-    /**
-     * @param mixed $content
-     * @return ResponseModelInterface
-     */
-    public function createFromContent($content)
+    public function createFromContent(mixed $content): ResponseModelInterface
     {
+        if ($content instanceof ExtendedResponseInterface) {
+            return $this->createFromExtendedResponse($content);
+        }
         if ($content instanceof Response) {
             return $this->createFromResponse($content);
         }
@@ -39,38 +31,27 @@ class ResponseModelFactory
         return $this->create()->setData($content);
     }
 
-    /**
-     * @param Response $response
-     * @return ResponseModelInterface
-     */
-    public function createFromResponse(Response $response)
+    public function createFromExtendedResponse(ExtendedResponseInterface $response): ResponseModelInterface
+    {
+        return $this->create()->setExtendedResponse($response);
+    }
+
+    public function createFromResponse(Response $response): ResponseModelInterface
     {
         return $this->create()->setResponse($response);
     }
 
-    /**
-     * @param PaginatedResponseInterface $response
-     * @return ResponseModelInterface
-     */
-    public function createFromPaginatedResponse(PaginatedResponseInterface $response)
+    public function createFromPaginatedResponse(PaginatedResponseInterface $response): ResponseModelInterface
     {
         return $this->create()->setPagination($response);
     }
 
-    /**
-     * @param \Throwable $throwable
-     *
-     * @return ResponseModelInterface
-     */
-    public function createFromThrowable(\Throwable $throwable)
+    public function createFromThrowable(\Throwable $throwable): ResponseModelInterface
     {
         return $this->create()->setThrowable($throwable);
     }
 
-    /**
-     * @return ResponseModelInterface
-     */
-    private function create()
+    private function create(): ResponseModelInterface
     {
         return clone $this->responseModel;
     }

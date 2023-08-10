@@ -19,7 +19,12 @@ class RequestTransformer implements RequestTransformerInterface
 
     protected function acceptJsonBody(Request $request)
     {
-        if (str_starts_with($request->headers->get('Content-Type', ''), 'application/json')) {
+        $contentType = $request->headers->get('Content-Type', '');
+
+        if (
+            str_starts_with($contentType, 'application/json') ||
+            str_starts_with($contentType, 'application/merge-patch+json')
+        ) {
             $data = json_decode($request->getContent(), true);
             $request->request->replace(is_array($data) ? $data : []);
         }

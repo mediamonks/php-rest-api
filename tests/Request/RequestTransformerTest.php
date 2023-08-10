@@ -22,21 +22,27 @@ class RequestTransformerTest extends TestCase
         return new RequestTransformer($serializer);
     }
 
-    public function testTransformChangesRequestParameters()
+    /**
+     * @dataProvider provideJsonMimeTypes
+     */
+    public function testTransformChangesRequestParameters(string $contentType): void
     {
         $subject = $this->getSubject();
         $content = ['Hello', 'World!'];
-        $request = $this->getRequest($content);
+        $request = $this->getRequest(content: $content, contentType: $contentType);
 
         $subject->transform($request);
 
         $this->assertEquals($content, iterator_to_array($request->request->getIterator()));
     }
 
-    public function testTransformChangesRequestFormatDefault()
+    /**
+     * @dataProvider provideJsonMimeTypes
+     */
+    public function testTransformChangesRequestFormatDefault(string $contentType)
     {
         $subject = $this->getSubject();
-        $request = $this->getRequest([]);
+        $request = $this->getRequest(content: [], contentType: $contentType);
 
         $subject->transform($request);
 
@@ -65,11 +71,19 @@ class RequestTransformerTest extends TestCase
         $this->assertEquals(Format::getDefault(), $request->getRequestFormat());
     }
 
-    protected function getRequest($content)
+    protected function getRequest(mixed $content, string $contentType = 'application/json'): Request
     {
         $request = Request::create('/');
         $request->initialize([], [], [], [], [], [], json_encode($content));
-        $request->headers->add(['Content-type' => 'application/json']);
+        $request->headers->add(['Content-type' => $contentType]);
         return $request;
+    }
+
+    public static function provideJsonMimeTypes(): array
+    {
+        return [
+            'application/json'             => ['application/json'],
+            'application/merge-patch+json' => ['application/merge-patch+json'],
+        ];
     }
 }
